@@ -2,6 +2,7 @@ package controller;
 
 import outils.Demande;
 
+import outils.Sens;
 public class DoublureController implements IController{
 
 	@Override
@@ -21,8 +22,26 @@ public class DoublureController implements IController{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
+	public DoublureController(int p1,int p2,Sens s,Sens s2){
+		
+	}
+	
+	public DoublureController(){
+		
+	}
 
-	
-	
+	@Override
+	public Sens getSens() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getPosition() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

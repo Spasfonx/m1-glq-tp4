@@ -2,6 +2,8 @@ package controller;
 
 import outils.Demande;
 
+import outils.Sens;
+
 public interface IController {
 
 	public void demander(Demande pDemande);
@@ -10,4 +12,7 @@ public interface IController {
 	
 	public void signalerChangementDEtage();
 	
+	public Sens getSens();
+	
+	public int getPosition();
 }
