@@ -12,8 +12,5 @@ public interface IIUG {
 	
 	public void changerPosition(int pInt);
 	
-	public void demander(Demande pDemande);
-	
-	public void arretDUrgence();
-	
+
 }

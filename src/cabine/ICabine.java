@@ -1,9 +1,6 @@
 package cabine;
 
 public interface ICabine {
-
-	
-	public void signalerChangementDEtage();
 	
 	public void monter();
 	
@@ -12,4 +9,5 @@ public interface ICabine {
 	public void arreterProchainNiveau();
 	
 	public void arreter();
+	
 }
