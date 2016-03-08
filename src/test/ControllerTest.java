@@ -1,39 +1,32 @@
 package test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.Scanner;
+
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
+import static org.junit.Assert.*;
 import controller.DoublureController;
 import controller.IController;
 import outils.Demande;
 import outils.Sens;
+
 public class ControllerTest {
 
 	private IController dc;
-	
-	
+	ByteArrayOutputStream baos;
+	PrintStream ps;
+	Scanner s;
 	@Before
-	public void setUp(){
-		dc =new  DoublureController();
-	}
-	
-	@Test
-	public void testApresArretProlonge(){
-		//Monter
-		dc =new DoublureController(7,3,Sens.INDEFINI,Sens.INDEFINI);
-		dc.demander(new Demande(1, Sens.MONTEE));
-		assertEquals(Sens.DESCENTE, dc.getSens());
-		assertSame(1, dc.getPosition());
+	public void setUp() {
+		dc = new DoublureController();
+		baos = new ByteArrayOutputStream();
+		ps = new PrintStream(baos);
 		
-		//étage-1
-		//dc=new
+		System.setOut(ps);
+		
 	}
 
-
-	
-	
-	
-	
-	
 }

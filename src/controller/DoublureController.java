@@ -3,33 +3,27 @@ package controller;
 import outils.Demande;
 
 import outils.Sens;
-public class DoublureController implements IController{
+
+public class DoublureController implements IController {
 
 	@Override
 	public void demander(Demande pDemande) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void arretDUrgence() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	@Override
-	public void signalerChangementDEtage() {
-		// TODO Auto-generated method stub
-		
+	public DoublureController(int p1, int p2, Sens s, Sens s2) {
+
 	}
-	
-	
-	public DoublureController(int p1,int p2,Sens s,Sens s2){
-		
-	}
-	
-	public DoublureController(){
-		
+
+	public DoublureController() {
+
 	}
 
 	@Override
@@ -43,5 +37,17 @@ public class DoublureController implements IController{
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
+	@Override
+	public void signalerChangementDEtage() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void stocker(Demande pDemande) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

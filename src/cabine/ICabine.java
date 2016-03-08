@@ -10,4 +10,5 @@ public interface ICabine {
 	
 	public void arreter();
 	
+	
 }

@@ -15,4 +15,6 @@ public interface IController {
 	public Sens getSens();
 	
 	public int getPosition();
+	
+	public void stocker(Demande pDemande);
 }
