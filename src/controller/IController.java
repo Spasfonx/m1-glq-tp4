@@ -16,5 +16,4 @@ public interface IController {
 	
 	public int getPosition();
 	
-	public void stocker(Demande pDemande);
 }

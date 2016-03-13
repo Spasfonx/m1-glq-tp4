@@ -44,10 +44,4 @@ public class DoublureController implements IController {
 
 	}
 
-	@Override
-	public void stocker(Demande pDemande) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
