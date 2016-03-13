@@ -2,9 +2,10 @@ package controller;
 
 import iug.IIUG;
 import outils.Demande;
+import outils.Logger;
+import outils.Message;
 import outils.Sens;
 import cabine.ICabine;
-
 import commande.ListeTrieeCirculaireDeDemandes;
 
 public class Controller implements IController {
@@ -12,7 +13,6 @@ public class Controller implements IController {
 	private int nombreEtages;
 	private int position;
 	private Sens sens;
-	private Demande demande;
 	private ListeTrieeCirculaireDeDemandes stockDemandes;
 	
 	private IIUG iug;
@@ -20,7 +20,7 @@ public class Controller implements IController {
 	
 	private EnumEtatController etat;
 	
-	public Controller(int nombreEtages, int position, Sens sens, Sens sensPrecedent) {
+	public Controller(ICabine cabine, IIUG iug, int nombreEtages, int position, Sens sens) {
 		this.nombreEtages = nombreEtages;
 		this.position = position;
 		this.sens = sens;
@@ -29,9 +29,13 @@ public class Controller implements IController {
 		this.etat = EnumEtatController.ATTENTE_DEMANDE;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void demander(Demande pDemande) {
 		if (EnumEtatController.ATTENTE_DEMANDE.equals(etat)) {
+			/* On initialise le sens de départ de la cabine */
 			int d = pDemande.etage() - position;
 			
 			if (pDemande.etage() > position) {
@@ -56,7 +60,17 @@ public class Controller implements IController {
 			this.stocker(pDemande);
 			this.iug.allumerBouton(pDemande);	
 			MAJSens();
+		} else if (EnumEtatController.ARRET_IMMINENT.equals(etat)) {
+			/* On vérifie que la demande ne soit pas l'étage sur lequel on va déjà s'arrêté */
+			if (Sens.MONTEE.equals(this.sens) 
+					&& (pDemande.etage() != this.position + 1 || !pDemande.sens().equals(this.sens))
+				|| Sens.DESCENTE.equals(this.sens) 
+					&& (pDemande.etage() != this.position - 1 || !pDemande.sens().equals(this.sens))) {
+				stocker(pDemande);
+				this.iug.allumerBouton(pDemande);
+			}
 		} else if (EnumEtatController.ARRET_ETAGE.equals(etat)) {
+			/* On vérifie que la demande ne soit pas l'étage sur lequel on est déjà arrêté */
 			if (pDemande.etage() != this.position || pDemande.sens() != this.sens) {
 				this.stocker(pDemande);
 				this.iug.allumerBouton(pDemande);
@@ -65,12 +79,20 @@ public class Controller implements IController {
 			stocker(pDemande);
 			this.iug.allumerBouton(pDemande);
 		}
+		
+		
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void signalerChangementDEtage() {
 		MAJPosition();
-		System.out.println(String.format("Signalement de changement d'etage (cabine en %s)", this.position));
+		
+		Logger.writeLog(
+				String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), this.position)
+			);
 		
 		Demande demandeSuivante = interrogerStock();
 		
@@ -89,7 +111,15 @@ public class Controller implements IController {
 		if (EnumEtatController.ARRET_IMMINENT.equals(etat)) {
 			etat = EnumEtatController.ARRET_ETAGE;
 			this.enleverDuStock(demandeSuivante);
+			
+			/* On peux éteindre à chaque fois la demande satisfaite en plus d'eteindre
+			 * la même demande au Sens INDEFINI puisqu'on sait que si par exemple l'étage
+			 * 4 en montée est satisfait, alors on peux eteindre et le bouton 4M et le bouton
+			 * 4 dans la cabine puisque c'est les mêmes demandes dans notre système */
 			this.iug.eteindreBouton(demandeSuivante);
+			this.iug.eteindreBouton(new Demande(demandeSuivante.etage(), Sens.INDEFINI));
+			
+			Logger.writeLog(Message.ARRET_PROCHAIN.toString());
 		}
 		
 		if (EnumEtatController.ARRET_ETAGE.equals(etat)) {
@@ -131,6 +161,9 @@ public class Controller implements IController {
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void arretDUrgence() {
 		this.eteindreTousBoutons();
@@ -150,12 +183,24 @@ public class Controller implements IController {
 		}
 	}
 	
+	/**
+	 * Renvoie la demande suivante dans le stock par rapport à la position 
+	 * et au sens actuel du controller.
+	 * @return Un objet représentant la demande suivante dans le stock,
+	 * null s'il n'y a pas d'autre demandes.
+	 */
 	private Demande interrogerStock() {
 		return stockDemandes.suivantDe(
 				new Demande(this.position, sens)
 			);
 	}
 	
+	/**
+	 * Stock une demande dans le stock de demande. Si le sens de la demande est INDEFINI,
+	 * on la transforme alors en MONTEE ou en DESCENTE selon les caractéristiques de
+	 * la demande et le sens courant.
+	 * @param pDemande - Demande à stocker
+	 */
 	private void stocker(Demande pDemande) {
 		/* Transformation du sens d'une demande si elle est INDEFINI */
 		if (pDemande.estIndefini()) {
@@ -179,14 +224,25 @@ public class Controller implements IController {
 			
 	}
 	
+	/**
+	 * Retire la demande passée en paramètre du stock de demandes.
+	 * @param pDemande - Demande à retirer
+	 */
 	private void enleverDuStock(Demande pDemande) {
 		this.stockDemandes.supprimer(pDemande);
 	}
 	
+	/**
+	 * Vide le stock de demandes.
+	 */
 	private void viderStock() {
 		this.stockDemandes.vider();
 	}
 	
+	/**
+	 * Met à jour la position de la cabine enregistré dans le controlleur en fonction
+	 * du sens de déplacement de la cabine.
+	 */
 	private void MAJPosition() {
 		if (Sens.MONTEE.equals(this.sens)) {
 			this.position++;
@@ -195,6 +251,10 @@ public class Controller implements IController {
 		}
 	}
 	
+	/**
+	 * Met à jour le sens de la cabine enregistré dans le controlleur en fonction
+	 * de l'état actuel de celui-ci. 
+	 */
 	private void MAJSens() {
 		if (EnumEtatController.MONTEE.equals(this.etat))
 			this.sens = Sens.MONTEE;
@@ -204,19 +264,15 @@ public class Controller implements IController {
 			this.sens = Sens.INDEFINI;
 	}
 	
+	/**
+	 * Eteint tous les boutons dans et en dehors de la cabine.
+	 */
 	private void eteindreTousBoutons() {
-		
-	}
-
-	@Override
-	public Sens getSens() {
-		return null;
-	}
-
-	@Override
-	public int getPosition() {
-		// TODO Auto-generated method stub
-		return 0;
+		for (int i = 0; i < this.nombreEtages - 1; i++) {
+			this.iug.eteindreBouton(new Demande(i, Sens.MONTEE));
+			this.iug.eteindreBouton(new Demande(i, Sens.DESCENTE));
+			this.iug.eteindreBouton(new Demande(i, Sens.INDEFINI));
+		}
 	}
 
 }

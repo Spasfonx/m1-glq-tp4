@@ -8,13 +8,11 @@ public class DoublureController implements IController {
 
 	@Override
 	public void demander(Demande pDemande) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void arretDUrgence() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -27,20 +25,7 @@ public class DoublureController implements IController {
 	}
 
 	@Override
-	public Sens getSens() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getPosition() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public void signalerChangementDEtage() {
-		// TODO Auto-generated method stub
 
 	}
 

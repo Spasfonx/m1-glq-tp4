@@ -8,7 +8,6 @@ public class Logger {
 	private static List<String> loggers = new ArrayList<String>();
 	private static int nbLog=-1;
 	
-	
 	/**
 	 * Ajoute une ligne dans le logger
 	 * @param message le message a ajouter
