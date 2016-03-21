@@ -8,12 +8,12 @@ import outils.Message;
 public class DoublureDeIUG implements IIUG{
 
 	public void allumerBouton(Demande pDemande) {
-		Logger.writeLog(String.format(Message.ALLUMER_BOUTON.toString(), pDemande));
+		Logger.writeLog(String.format(Message.ALLUMER_BOUTON.getMessage(), pDemande));
 		
 	}
 
 	public void eteindreBouton(Demande pDemande) {
-		Logger.writeLog(String.format(Message.ETEINDRE_BOUTON.toString(), pDemande));
+		Logger.writeLog(String.format(Message.ETEINDRE_BOUTON.getMessage(), pDemande));
 		
 	}
 

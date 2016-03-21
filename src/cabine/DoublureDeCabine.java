@@ -11,12 +11,12 @@ public class DoublureDeCabine implements ICabine {
 	}
 
 	public void monter() {
-		Logger.writeLog(Message.MONTER.toString());
+		Logger.writeLog(Message.MONTER.getMessage());
 		
 	}
 
 	public void descendre() {
-		Logger.writeLog(Message.DESCENDRE.toString());
+		Logger.writeLog(Message.DESCENDRE.getMessage());
 		
 	}
 
