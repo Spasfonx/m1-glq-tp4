@@ -32,13 +32,17 @@ public class ControllerTest {
 	public void setUp() {
 		cabine = new DoublureDeCabine();
 		iug = new DoublureDeIUG(8);
+		Logger.clearLog();
+		
 	}
 
 	@Test
 	public void testAppelPlusHautUtilisateur() {
 		// 1.1 Monter
 		monter1_1();
+		Logger.clearLog();
 		etageMoins1_1_1();
+		Logger.clearLog();
 		descendre1_2();
 
 	}
@@ -58,7 +62,7 @@ public class ControllerTest {
 		message += "\n" + Message.ARRET_PROCHAIN.getMessage();
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 	}
 
 	private void etageMoins1_1_1() {
@@ -75,7 +79,7 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 
 	}
 
@@ -94,13 +98,14 @@ public class ControllerTest {
 		message += "\n" + Message.ARRET_PROCHAIN.getMessage();
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 
 	}
 
 	@Test
 	public void testAppelPlusBas() {
 		monter2_1();
+		Logger.clearLog();
 		etagePlusUn2_1_1();
 	}
 
@@ -116,7 +121,7 @@ public class ControllerTest {
 		message += "\n" + Message.ARRET_PROCHAIN.getMessage();
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 	}
 
 	private void etagePlusUn2_1_1() {
@@ -134,12 +139,13 @@ public class ControllerTest {
 
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 	}
 
 	@Test
 	public void testAppelMemePalier() {
 		monter3_1();
+		Logger.clearLog();
 		descendre3_2();
 	}
 
@@ -151,7 +157,7 @@ public class ControllerTest {
 		String message = "\n" + String.format(Message.ALLUMER_BOUTON.getMessage(), d);
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 
 	}
 
@@ -163,8 +169,10 @@ public class ControllerTest {
 		String message = "\n" + String.format(Message.ALLUMER_BOUTON.getMessage(), d);
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 	}
+	
+	//TODO appel meme palier quand ascenseur monte ou descend
 
 	@Test
 	public void testAppelApresArretProlonger() {
@@ -188,13 +196,14 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "3");
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 
 	}
 
 	@Test
 	public void testAppelDeMemeSensCabine() {
 		monte5_1();
+		Logger.clearLog();
 		descend5_2();
 	}
 
@@ -221,7 +230,7 @@ public class ControllerTest {
 
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 
 	}
 
@@ -251,7 +260,7 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "1");
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 
 	}
 
@@ -296,13 +305,15 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "7");
 		message += "\n" + Message.DESCENDRE.getMessage();
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 	}
 
 	@Test
 	public void appelAscenseurChangementSens() {
 		sansChangementSens7_1();
+		Logger.clearLog();
 		avecChangementSens7_2();
+		Logger.clearLog();
 		avec2ChangementSens7_3();
 	}
 
@@ -333,7 +344,7 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "1");
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 	}
 
 	private void avecChangementSens7_2() {
@@ -364,7 +375,7 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "7");
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 
 	}
 
@@ -420,7 +431,7 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "7");
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 	}
 
 	@Test
@@ -458,12 +469,13 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "4");
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 	}
 
 	@Test
 	public void deuxAppelMemeEtage() {
 		memeSens9_1();
+		Logger.clearLog();
 		sensDifferent9_2();
 
 	}
@@ -487,7 +499,7 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 	}
 
 	private void sensDifferent9_2() {
@@ -520,14 +532,17 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "3");
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 	}
 
 	@Test
 	public void appelEtageEnCoursService() {
 		appelExInt10_1();
+		Logger.clearLog();
 		appelInterieur10_2();
+		Logger.clearLog();
 		appelExtMemeDirection10_3();
+		Logger.clearLog();
 		appelExtDifDirection10_4();
 	}
 
@@ -548,7 +563,7 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 	}
 
 	private void appelInterieur10_2() {
@@ -566,7 +581,7 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "3");
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 
 	}
 
@@ -585,7 +600,7 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "3");
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 	}
 
 	private void appelExtDifDirection10_4() {
@@ -604,7 +619,7 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "3");
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 	}
 
 	@Test
@@ -628,7 +643,7 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d3);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 	}
 
 	@Test
@@ -669,7 +684,7 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "3");
 		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		assertEquals(message, Logger.getLog());
-		Logger.clearLog();
+		
 
 	}
 
