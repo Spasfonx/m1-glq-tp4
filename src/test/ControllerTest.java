@@ -16,6 +16,11 @@ import cabine.ICabine;
 import controller.Controller;
 import controller.IController;
 
+/**
+ * Classe de test du controller.
+ * @author Valentin
+ *
+ */
 public class ControllerTest {
 
 	private IController dc;
@@ -30,14 +35,26 @@ public class ControllerTest {
 
 	}
 
+	/**
+	 * Reinitialise l'état de la cabine.
+	 * (apellé entre chaque test)
+	 */
 	private void resetCabine() {
 		this.cabine = new DoublureDeCabine();
 	}
 	
+	/**
+	 * Reinitialise l'état de l'iug.
+	 * (apellé entre chaque test)
+	 */
 	private void resetIUG() {
 		this.iug = new DoublureDeIUG(8);
 	}
 
+	/**
+	 * Test d'un appel d'ascenseur plus haut
+	 * que l'utilisateur
+	 */
 	@Test
 	public void testAppelPlusHautUtilisateur() {
 		// 1.1 Monter
@@ -128,6 +145,11 @@ public class ControllerTest {
 
 	}
 
+	
+	/**
+	 * Test d'un appel d'ascenseur
+	 *  plus bas que l'utilisateur.
+	 */
 	@Test
 	public void testAppelPlusBas() {
 		monter2_1();
@@ -181,6 +203,11 @@ public class ControllerTest {
 
 	}
 
+	
+	/**
+	 * Test d'un appel d'ascenseur
+	 * au même palier.
+	 */
 	@Test
 	public void testAppelMemePalier() {
 		monter3_1();
@@ -217,6 +244,10 @@ public class ControllerTest {
 
 	// TODO appel meme palier quand ascenseur monte ou descend
 
+	/**
+	 * Appel d’un ascenseur après un 
+	 * arrêt d’urgence suivi par un arrêt prolongé.
+	 */
 	@Test
 	public void testAppelApresArretProlonger() {
 		directionOppose4_1();
@@ -258,6 +289,10 @@ public class ControllerTest {
 
 	}
 
+	/**
+	 * Test appel de l'ascenseur dans le même 
+	 * sens que celui de la cabine en cours de déplacement
+	 */
 	@Test
 	public void testAppelDeMemeSensCabine() {
 		monte5_1();
@@ -355,6 +390,10 @@ public class ControllerTest {
 
 	}
 
+	/**
+	 * Test appel de l'ascenseur dans le sens 
+	 * inverse que celui de la cabine en cours de déplacement.
+	 */
 	@Test
 	public void testAppelSensInverse() {
 		monte6_1();
@@ -416,6 +455,11 @@ public class ControllerTest {
 
 	}
 
+	/**
+	 * Test d'appel de l'ascenseur qui sont satisfaits sans changement de sens,
+	 *  ou avec un changement de sens, 
+	 *  ou avec deux changements de sens de la cabine
+	 */
 	@Test
 	public void appelAscenseurChangementSens() {
 		sansChangementSens7_1();
@@ -635,6 +679,9 @@ public class ControllerTest {
 
 	}
 
+	/**
+	 * Test de deux appels à partir du même palier.
+	 */
 	@Test
 	public void deuxAppelMemePalier() {
 		ascenseurMonte8_1();
@@ -691,6 +738,9 @@ public class ControllerTest {
 
 	}
 
+	/**
+	 * Test de deux appel pour le même étage.
+	 */
 	@Test
 	public void deuxAppelMemeEtage() {
 		memeSens9_1();
@@ -788,6 +838,9 @@ public class ControllerTest {
 
 	}
 
+	/**
+	 * Test d'un appel pour un étage en cours de service.
+	 */
 	@Test
 	public void appelEtageEnCoursService() {
 		appelExInt10_1();
@@ -804,6 +857,7 @@ public class ControllerTest {
 		this.resetCabine();
 		appelExtDifDirection10_4();
 	}
+
 
 	private void appelExInt10_1() {
 		Demande d = new Demande(3, Sens.INDEFINI);
@@ -922,6 +976,9 @@ public class ControllerTest {
 
 	}
 
+	/**
+	 * Test d'un arret d'urgence.
+	 */
 	@Test
 	public void arretUrgence() {
 		Demande d = new Demande(3, Sens.INDEFINI);
@@ -958,7 +1015,10 @@ public class ControllerTest {
 		assertEquals(message, Logger.getLog());
 
 	}
-
+	
+	/**
+	 * Test d'une reprise après arret d'urgence.
+	 */
 	@Test
 	public void repriseArretUrgence() {
 		Demande d = new Demande(3, Sens.MONTEE);

@@ -26,6 +26,10 @@ public enum Message {
 		this.message = pMessage;
 	}
 	
+	/**
+	 * Retourne le contenu du message
+	 * @return le contenu du message
+	 */
 	public String getMessage() {
 		return this.message;
 	}

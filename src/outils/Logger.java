@@ -4,6 +4,11 @@ package outils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Logger servant aux test JUNIT
+ * @author Valentin
+ *
+ */
 public class Logger {
 
 	private static String log="";
@@ -18,17 +23,15 @@ public class Logger {
 	
 	
 	/**
-	 * Retourne la dernière ligne entrée dans les logs
-	 * @return la dernière ligne
+	 * Retourne le logger
+	 * @return - le logger
 	 */
 	public static String getLog(){
 		return log;
 	}
 	
 	/**
-	 * Retourne la ligne n-before ou n est le nombre d'entré 
-	 * @param before le nombre de ligne précédente a la dernière a afficher
-	 * @return la ligne correspondante
+	 * Efface les logs
 	 */
 	public static void clearLog(){
 		log="";

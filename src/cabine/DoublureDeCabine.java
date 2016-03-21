@@ -3,6 +3,10 @@ package cabine;
 import outils.Logger;
 import outils.Message;
 
+/**
+ * Doublure de la classe Cabine
+ * @author Valentin
+ */
 public class DoublureDeCabine implements ICabine {
 
 	private boolean monte;
@@ -13,37 +17,40 @@ public class DoublureDeCabine implements ICabine {
 		descend = false;
 	}
 
-	public void signalerChangementDEtage() {
-		// TODO Auto-generated method stub
-
-	}
-
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void monter() {
 		if (!monte) {
 			Logger.writeLog(Message.MONTER.getMessage());
 			monte = true;
 			descend = false;
 		}
-
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void descendre() {
 		if (!descend) {
 			Logger.writeLog(Message.DESCENDRE.getMessage());
 			descend = true;
 			monte = false;
 		}
-
 	}
 
-	public void arreterProchainNiveau() {
-		// TODO Auto-generated method stub
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void arreterProchainNiveau() {}
 
-	}
-
-	public void arreter() {
-		// TODO Auto-generated method stub
-
-	}
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void arreter() {}
 
 }
