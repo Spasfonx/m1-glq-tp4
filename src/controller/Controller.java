@@ -115,6 +115,11 @@ public class Controller implements IController {
 				this.etat = EnumEtatController.ARRET_IMMINENT;
 			}
 			
+			/* Demande au même palier */ //TODO: VERIFIER TOUS LES CAS !!!!!
+			if (this.position == pDemande.etage() && Sens.INDEFINI.equals(this.sens)) {
+				this.iug.eteindreBouton(pDemande);
+			}
+			
 			MAJSens();
 		} else if (EnumEtatController.ARRET_IMMINENT.equals(etat)) {
 			/* On vérifie que la demande ne soit pas l'étage 
