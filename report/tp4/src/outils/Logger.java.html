@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Logger.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">test (22 mars 2016 00:11:19)</a> &gt; <a href="../../index.html" class="el_group">tp4</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">outils</a> &gt; <span class="el_source">Logger.java</span></div><h1>Logger.java</h1><pre class="source lang-java linenums">
+package outils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="nc" id="L7">public class Logger {</span>
+
+<span class="fc" id="L9">	private static String log=&quot;&quot;;</span>
+	
+	/**
+	 * Ajoute une ligne dans le logger
+	 * @param message le message a ajouter
+	 */
+	public static void writeLog(String message){
+<span class="fc" id="L16">		log+=&quot;\n&quot;+message;</span>
+<span class="fc" id="L17">	}</span>
+	
+	
+	/**
+	 * Retourne la dernière ligne entrée dans les logs
+	 * @return la dernière ligne
+	 */
+	public static String getLog(){
+<span class="fc" id="L25">		return log;</span>
+	}
+	
+	/**
+	 * Retourne la ligne n-before ou n est le nombre d'entré 
+	 * @param before le nombre de ligne précédente a la dernière a afficher
+	 * @return la ligne correspondante
+	 */
+	public static void clearLog(){
+<span class="fc" id="L34">		log=&quot;&quot;;</span>
+<span class="fc" id="L35">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>test (22 mars 2016 00:11:19)</div></body></html>

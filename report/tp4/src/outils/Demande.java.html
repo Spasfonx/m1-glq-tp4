@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Demande.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">test (22 mars 2016 00:11:19)</a> &gt; <a href="../../index.html" class="el_group">tp4</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">outils</a> &gt; <span class="el_source">Demande.java</span></div><h1>Demande.java</h1><pre class="source lang-java linenums">package outils;
+
+import java.util.Objects;
+
+/**
+ * Classe qui représente une demande d'ascenceur.
+ * @author Christophe
+ */
+public class Demande {
+	
+	/**
+	 * Etage de la demande
+	 */
+	private int etage;
+	
+	/**
+	 * {@link Sens} de la demande
+	 */
+	private Sens sens;
+	
+	/**
+	 * Instancie une demande avec un etage et un sens 
+	 * @param etage - Etage
+	 * @param sens - {@link Sens}
+	 */
+<span class="fc" id="L26">	public Demande(int etage, Sens sens) {</span>
+<span class="fc" id="L27">		this.etage = etage;</span>
+<span class="fc" id="L28">		this.sens = sens;</span>
+<span class="fc" id="L29">	}</span>
+	
+	/**
+	 * Instancie une demande à l'étage 0 avec un sens INDEFINI
+	 */
+	public Demande() {
+<span class="fc" id="L35">		this(0, Sens.INDEFINI);</span>
+<span class="fc" id="L36">	}</span>
+	
+	/**
+	 * Renvoi le numéro de l'étage de la demande
+	 * @return
+	 */
+	public int etage() {
+<span class="fc" id="L43">		return this.etage;</span>
+	}
+
+	/**
+	 * Renvois le {@link Sens} actuel de la demande.
+	 * @return {@link Sens} actuel de la demande
+	 */
+	public Sens sens() {
+<span class="fc" id="L51">		return this.sens;</span>
+	}
+	
+	/**
+	 * Permet de savoir si le le sens de la demande est indéfini
+	 * @return Vrai si le sens de la demande est indéfini
+	 */
+	public boolean estIndefini() {
+<span class="fc" id="L59">		return Sens.INDEFINI.equals(this.sens);</span>
+	}
+	
+	/**
+	 * Permet de savoir si le le sens de la demande est en montée
+	 * @return Vrai si le sens de la demande est en montée
+	 */
+	public boolean enMontee() {
+<span class="fc" id="L67">		return Sens.MONTEE.equals(this.sens);</span>
+	}
+	
+	/**
+	 * Permet de savoir si le le sens de la demande est en descente.
+	 * @return Vrai si le sens de la demande est en descente
+	 */
+	public boolean enDescente() {
+<span class="fc" id="L75">		return Sens.DESCENTE.equals(this.sens);</span>
+	}
+	
+	/**
+	 * Passe à l'étage suivant en fonction du sens de la demande.
+	 * @throws ExceptionCabineArretee - Si le sens de la cabine est indéfini
+	 */
+	public void passeEtageSuivant() throws ExceptionCabineArretee {
+<span class="fc bfc" id="L83" title="All 2 branches covered.">		if (estIndefini())</span>
+<span class="fc" id="L84">			throw new ExceptionCabineArretee();</span>
+			
+<span class="fc bfc" id="L86" title="All 2 branches covered.">		if (enMontee())</span>
+<span class="fc" id="L87">			this.etage++;</span>
+		else
+<span class="fc" id="L89">			this.etage--;</span>
+<span class="fc" id="L90">	}</span>
+	
+	/**
+	 * Change le sens actuel de la demande.
+	 * @param sens - Sens final de la demande
+	 */
+	public void changeSens(Sens sens) {
+<span class="fc" id="L97">		this.sens = sens;</span>
+<span class="fc" id="L98">	}</span>
+	
+	/**
+	 * Renvois une chaine de caracère qui représente textuellement l'objet Demande.
+	 * Elle se présente de la forme : 
+	 * - 3v
+	 * - 5-
+	 * - 6d
+	 * - etc...
+	 * @return Chaine de caractère représentant l'objet Demande
+	 */
+	@Override
+	public String toString() {
+		String strSens;
+		
+<span class="fc bfc" id="L113" title="All 2 branches covered.">		if (Sens.MONTEE.equals(this.sens)) {</span>
+<span class="fc" id="L114">			strSens = &quot;^&quot;;</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">		} else if (Sens.DESCENTE.equals(this.sens)) {</span>
+<span class="fc" id="L116">			strSens = &quot;v&quot;;</span>
+<span class="fc" id="L117">		} else {</span>
+<span class="fc" id="L118">			strSens = &quot;-&quot;;</span>
+		}
+		
+<span class="fc" id="L121">		return this.etage() + strSens; </span>
+	}
+	
+	/**
+	 * Teste l'egalité entre la Demande actuel et l'objet passé en paramètre.s
+	 */
+	@Override
+	public boolean equals(Object obj) {
+<span class="fc bfc" id="L129" title="All 2 branches covered.">		return obj != null </span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">				&amp;&amp; obj instanceof Demande</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">				&amp;&amp; ((Demande) obj).etage() == this.etage</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">				&amp;&amp; ((Demande) obj).sens.equals(this.sens);</span>
+	}
+	
+	/**
+	 * Redéfinition du hashCode.
+	 * @return hashCode en fonction des champs etage et sens de la demande
+	 */
+	@Override
+	public int hashCode() {
+<span class="nc" id="L141">		return Objects.hash(this.etage, this.sens);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>test (22 mars 2016 00:11:19)</div></body></html>

@@ -1,0 +1,990 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ControllerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">test (22 mars 2016 00:11:19)</a> &gt; <a href="../../index.html" class="el_group">tp4</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">test</a> &gt; <span class="el_source">ControllerTest.java</span></div><h1>ControllerTest.java</h1><pre class="source lang-java linenums">package test;
+
+import static org.junit.Assert.assertEquals;
+import iug.DoublureDeIUG;
+import iug.IIUG;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import outils.Demande;
+import outils.Logger;
+import outils.Message;
+import outils.Sens;
+import cabine.DoublureDeCabine;
+import cabine.ICabine;
+import controller.Controller;
+import controller.IController;
+
+<span class="fc" id="L19">public class ControllerTest {</span>
+
+	private IController dc;
+	private ICabine cabine;
+	private IIUG iug;
+
+	@Before
+	public void setUp() {
+<span class="fc" id="L27">		cabine = new DoublureDeCabine();</span>
+<span class="fc" id="L28">		iug = new DoublureDeIUG(8);</span>
+<span class="fc" id="L29">		Logger.clearLog();</span>
+
+<span class="fc" id="L31">	}</span>
+
+	private void resetCabine() {
+<span class="fc" id="L34">		this.cabine = new DoublureDeCabine();</span>
+<span class="fc" id="L35">	}</span>
+	
+	private void resetIUG() {
+<span class="fc" id="L38">		this.iug = new DoublureDeIUG(8);</span>
+<span class="fc" id="L39">	}</span>
+
+	@Test
+	public void testAppelPlusHautUtilisateur() {
+		// 1.1 Monter
+<span class="fc" id="L44">		monter1_1();</span>
+<span class="fc" id="L45">		resetIUG();</span>
+<span class="fc" id="L46">		resetCabine();</span>
+<span class="fc" id="L47">		Logger.clearLog();</span>
+<span class="fc" id="L48">		etageMoins1_1_1();</span>
+<span class="fc" id="L49">		resetCabine();</span>
+<span class="fc" id="L50">		resetIUG();</span>
+<span class="fc" id="L51">		Logger.clearLog();</span>
+<span class="fc" id="L52">		descendre1_2();</span>
+
+<span class="fc" id="L54">	}</span>
+
+	private void monter1_1() {
+		Demande d;
+<span class="fc" id="L58">		dc = new Controller(cabine, iug, 8, 3, Sens.INDEFINI);</span>
+<span class="fc" id="L59">		d = new Demande(1, Sens.MONTEE);</span>
+<span class="fc" id="L60">		dc.demander(d);</span>
+<span class="fc" id="L61">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L62">		dc.signalerChangementDEtage();</span>
+
+<span class="fc" id="L64">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L65">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L66">		message += &quot;\n&quot; + Message.DESCENDRE.getMessage();</span>
+<span class="fc" id="L67">		message += &quot;\n&quot;</span>
+<span class="fc" id="L68">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L69">						&quot;2&quot;);</span>
+<span class="fc" id="L70">		message += &quot;\n&quot;</span>
+<span class="fc" id="L71">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L72">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L73">		message += &quot;\n&quot;</span>
+<span class="fc" id="L74">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L75">						&quot;1&quot;);</span>
+		
+		
+<span class="fc" id="L78">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L80">	}</span>
+
+	private void etageMoins1_1_1() {
+		Demande d;
+<span class="fc" id="L84">		dc = new Controller(cabine, iug, 8, 2, Sens.INDEFINI);</span>
+<span class="fc" id="L85">		d = new Demande(1, Sens.MONTEE);</span>
+<span class="fc" id="L86">		dc.demander(d);</span>
+<span class="fc" id="L87">		dc.signalerChangementDEtage();</span>
+
+<span class="fc" id="L89">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L90">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L91">		message += &quot;\n&quot; + Message.DESCENDRE.getMessage();</span>
+<span class="fc" id="L92">		message += &quot;\n&quot;</span>
+<span class="fc" id="L93">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L94">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+		
+<span class="fc" id="L96">		message += &quot;\n&quot;</span>
+<span class="fc" id="L97">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L98">						&quot;1&quot;);</span>
+		
+
+<span class="fc" id="L101">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L103">	}</span>
+
+	private void descendre1_2() {
+		Demande d;
+<span class="fc" id="L107">		dc = new Controller(cabine, iug, 8, 3, Sens.INDEFINI);</span>
+<span class="fc" id="L108">		d = new Demande(1, Sens.DESCENTE);</span>
+<span class="fc" id="L109">		dc.demander(d);</span>
+<span class="fc" id="L110">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L111">		dc.signalerChangementDEtage();</span>
+
+<span class="fc" id="L113">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L114">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L115">		message += &quot;\n&quot; + Message.DESCENDRE.getMessage();</span>
+<span class="fc" id="L116">		message += &quot;\n&quot;</span>
+<span class="fc" id="L117">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L118">						&quot;2&quot;);</span>
+<span class="fc" id="L119">		message += &quot;\n&quot;</span>
+<span class="fc" id="L120">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L121">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L122">		message += &quot;\n&quot;</span>
+<span class="fc" id="L123">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L124">						&quot;1&quot;);</span>
+	
+
+<span class="fc" id="L127">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L129">	}</span>
+
+	@Test
+	public void testAppelPlusBas() {
+<span class="fc" id="L133">		monter2_1();</span>
+<span class="fc" id="L134">		Logger.clearLog();</span>
+<span class="fc" id="L135">		resetIUG();</span>
+<span class="fc" id="L136">		this.resetCabine();</span>
+<span class="fc" id="L137">		etagePlusUn2_1_1();</span>
+<span class="fc" id="L138">	}</span>
+
+	private void monter2_1() {
+		Demande d;
+<span class="fc" id="L142">		dc = new Controller(cabine, iug, 8, 3, Sens.INDEFINI);</span>
+<span class="fc" id="L143">		d = new Demande(5, Sens.MONTEE);</span>
+<span class="fc" id="L144">		dc.demander(d);</span>
+<span class="fc" id="L145">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L146">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L147">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L148">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L149">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L150">		message += &quot;\n&quot;</span>
+<span class="fc" id="L151">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L152">						&quot;4&quot;);</span>
+<span class="fc" id="L153">		message += &quot;\n&quot;</span>
+<span class="fc" id="L154">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L155">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L156">		message += &quot;\n&quot;</span>
+<span class="fc" id="L157">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L158">						&quot;5&quot;);</span>
+<span class="fc" id="L159">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L161">	}</span>
+
+	private void etagePlusUn2_1_1() {
+		Demande d;
+<span class="fc" id="L165">		dc = new Controller(cabine, iug, 8, 3, Sens.INDEFINI);</span>
+<span class="fc" id="L166">		d = new Demande(4, Sens.MONTEE);</span>
+<span class="fc" id="L167">		dc.demander(d);</span>
+<span class="fc" id="L168">		dc.signalerChangementDEtage();</span>
+
+<span class="fc" id="L170">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L171">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+
+<span class="fc" id="L173">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L174">		message += &quot;\n&quot;</span>
+<span class="fc" id="L175">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L176">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L177">		message += &quot;\n&quot;</span>
+<span class="fc" id="L178">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L179">						&quot;4&quot;);</span>
+<span class="fc" id="L180">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L182">	}</span>
+
+	@Test
+	public void testAppelMemePalier() {
+<span class="fc" id="L186">		monter3_1();</span>
+<span class="fc" id="L187">		resetIUG();</span>
+<span class="fc" id="L188">		Logger.clearLog();</span>
+<span class="fc" id="L189">		descendre3_2();</span>
+<span class="fc" id="L190">	}</span>
+
+	private void monter3_1() {
+		Demande d;
+<span class="fc" id="L194">		dc = new Controller(cabine, iug, 8, 3, Sens.INDEFINI);</span>
+<span class="fc" id="L195">		d = new Demande(3, Sens.MONTEE);</span>
+<span class="fc" id="L196">		dc.demander(d);</span>
+<span class="fc" id="L197">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L198">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L199">		message += &quot;\n&quot;</span>
+<span class="fc" id="L200">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L201">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L203">	}</span>
+
+	private void descendre3_2() {
+		Demande d;
+<span class="fc" id="L207">		dc = new Controller(cabine, iug, 8, 3, Sens.INDEFINI);</span>
+<span class="fc" id="L208">		d = new Demande(3, Sens.DESCENTE);</span>
+<span class="fc" id="L209">		dc.demander(d);</span>
+<span class="fc" id="L210">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L211">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L212">		message += &quot;\n&quot;</span>
+<span class="fc" id="L213">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L214">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L216">	}</span>
+
+	// TODO appel meme palier quand ascenseur monte ou descend
+
+	@Test
+	public void testAppelApresArretProlonger() {
+<span class="fc" id="L222">		directionOppose4_1();</span>
+<span class="fc" id="L223">	}</span>
+
+	private void directionOppose4_1() {
+		Demande d;
+<span class="fc" id="L227">		dc = new Controller(cabine, iug, 8, 0, Sens.INDEFINI);</span>
+<span class="fc" id="L228">		d = new Demande(3, Sens.MONTEE);</span>
+		
+<span class="fc" id="L230">		dc.demander(d);</span>
+<span class="fc" id="L231">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L232">		dc.arretDUrgence();</span>
+		
+<span class="fc" id="L234">		dc.demander(d);</span>
+<span class="fc" id="L235">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L236">		dc.signalerChangementDEtage();</span>
+		
+<span class="fc" id="L238">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L239">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L240">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L241">		message += &quot;\n&quot;</span>
+<span class="fc" id="L242">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), &quot;1&quot;);</span>
+<span class="fc" id="L243">		message += &quot;\n&quot;</span>
+<span class="fc" id="L244">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+		
+<span class="fc" id="L246">		message += &quot;\n&quot;</span>
+<span class="fc" id="L247">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L248">		message += &quot;\n&quot;</span>
+<span class="fc" id="L249">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L250">						&quot;2&quot;);</span>
+<span class="fc" id="L251">		message += &quot;\n&quot;</span>
+<span class="fc" id="L252">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L253">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L254">		message += &quot;\n&quot;</span>
+<span class="fc" id="L255">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L256">						&quot;3&quot;);</span>
+<span class="fc" id="L257">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L259">	}</span>
+
+	@Test
+	public void testAppelDeMemeSensCabine() {
+<span class="fc" id="L263">		monte5_1();</span>
+<span class="fc" id="L264">		resetIUG();</span>
+<span class="fc" id="L265">		Logger.clearLog();</span>
+<span class="fc" id="L266">		descend5_2();</span>
+<span class="fc" id="L267">	}</span>
+
+	private void monte5_1() {
+		Demande d;
+<span class="fc" id="L271">		dc = new Controller(cabine, iug, 8, 1, Sens.INDEFINI);</span>
+<span class="fc" id="L272">		d = new Demande(5, Sens.INDEFINI);</span>
+<span class="fc" id="L273">		dc.demander(d);</span>
+<span class="fc" id="L274">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L275">		dc.demander(new Demande(4, Sens.MONTEE));</span>
+<span class="fc" id="L276">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L277">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L278">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L279">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L280">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L281">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L282">		message += &quot;\n&quot;</span>
+<span class="fc" id="L283">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L284">						&quot;2&quot;);</span>
+<span class="fc" id="L285">		message += &quot;\n&quot;</span>
+<span class="fc" id="L286">				+ String.format(Message.ALLUMER_BOUTON.getMessage(),</span>
+<span class="fc" id="L287">						new Demande(4, Sens.MONTEE));</span>
+<span class="fc" id="L288">		message += &quot;\n&quot;</span>
+<span class="fc" id="L289">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L290">						&quot;3&quot;);</span>
+<span class="fc" id="L291">		message += &quot;\n&quot;</span>
+<span class="fc" id="L292">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(),</span>
+<span class="fc" id="L293">						new Demande(4, Sens.MONTEE));</span>
+<span class="fc" id="L294">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L295">		message += &quot;\n&quot;</span>
+<span class="fc" id="L296">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L297">						&quot;4&quot;);</span>
+<span class="fc" id="L298">		message += &quot;\n&quot;</span>
+<span class="fc" id="L299">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L300">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L301">		message += &quot;\n&quot;</span>
+<span class="fc" id="L302">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L303">						&quot;5&quot;);</span>
+
+<span class="fc" id="L305">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L307">	}</span>
+
+	private void descend5_2() {
+		Demande d;
+<span class="fc" id="L311">		dc = new Controller(cabine, iug, 8, 7, Sens.INDEFINI);</span>
+<span class="fc" id="L312">		d = new Demande(1, Sens.INDEFINI);</span>
+<span class="fc" id="L313">		dc.demander(d);</span>
+<span class="fc" id="L314">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L315">		dc.demander(new Demande(4, Sens.DESCENTE));</span>
+<span class="fc" id="L316">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L317">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L318">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L319">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L320">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L321">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L322">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L323">		message += &quot;\n&quot; + Message.DESCENDRE.getMessage();</span>
+<span class="fc" id="L324">		message += &quot;\n&quot;</span>
+<span class="fc" id="L325">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L326">						&quot;6&quot;);</span>
+<span class="fc" id="L327">		message += &quot;\n&quot;</span>
+<span class="fc" id="L328">				+ String.format(Message.ALLUMER_BOUTON.getMessage(),</span>
+<span class="fc" id="L329">						new Demande(4, Sens.DESCENTE));</span>
+<span class="fc" id="L330">		message += &quot;\n&quot;</span>
+<span class="fc" id="L331">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L332">						&quot;5&quot;);</span>
+<span class="fc" id="L333">		message += &quot;\n&quot;</span>
+<span class="fc" id="L334">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(),</span>
+<span class="fc" id="L335">						new Demande(4, Sens.DESCENTE));</span>
+<span class="fc" id="L336">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L337">		message += &quot;\n&quot;</span>
+<span class="fc" id="L338">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L339">						&quot;4&quot;);</span>
+
+<span class="fc" id="L341">		message += &quot;\n&quot;</span>
+<span class="fc" id="L342">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L343">						&quot;3&quot;);</span>
+<span class="fc" id="L344">		message += &quot;\n&quot;</span>
+<span class="fc" id="L345">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L346">						&quot;2&quot;);</span>
+<span class="fc" id="L347">		message += &quot;\n&quot;</span>
+<span class="fc" id="L348">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L349">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L350">		message += &quot;\n&quot;</span>
+<span class="fc" id="L351">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L352">						&quot;1&quot;);</span>
+
+<span class="fc" id="L354">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L356">	}</span>
+
+	@Test
+	public void testAppelSensInverse() {
+<span class="fc" id="L360">		monte6_1();</span>
+<span class="fc" id="L361">	}</span>
+
+	private void monte6_1() {
+		Demande d;
+<span class="fc" id="L365">		Demande d2 = new Demande(4, Sens.MONTEE);</span>
+<span class="fc" id="L366">		Demande d3 = new Demande(3, Sens.DESCENTE);</span>
+<span class="fc" id="L367">		dc = new Controller(cabine, iug, 8, 1, Sens.INDEFINI);</span>
+<span class="fc" id="L368">		d = new Demande(7, Sens.INDEFINI);</span>
+
+<span class="fc" id="L370">		dc.demander(d);</span>
+
+<span class="fc" id="L372">		dc.signalerChangementDEtage();</span>
+
+<span class="fc" id="L374">		dc.demander(d2);</span>
+<span class="fc" id="L375">		dc.demander(d3);</span>
+
+<span class="fc" id="L377">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L378">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L379">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L380">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L381">		dc.signalerChangementDEtage();</span>
+
+<span class="fc" id="L383">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L384">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L385">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L386">		message += &quot;\n&quot;</span>
+<span class="fc" id="L387">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L388">						&quot;2&quot;);</span>
+<span class="fc" id="L389">		message += &quot;\n&quot;</span>
+<span class="fc" id="L390">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L391">		message += &quot;\n&quot;</span>
+<span class="fc" id="L392">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d3);</span>
+<span class="fc" id="L393">		message += &quot;\n&quot;</span>
+<span class="fc" id="L394">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L395">						&quot;3&quot;);</span>
+<span class="fc" id="L396">		message += &quot;\n&quot;</span>
+<span class="fc" id="L397">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L398">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L399">		message += &quot;\n&quot;</span>
+<span class="fc" id="L400">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L401">						&quot;4&quot;);</span>
+<span class="fc" id="L402">		message += &quot;\n&quot;</span>
+<span class="fc" id="L403">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L404">						&quot;5&quot;);</span>
+<span class="fc" id="L405">		message += &quot;\n&quot;</span>
+<span class="fc" id="L406">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L407">						&quot;6&quot;);</span>
+<span class="fc" id="L408">		message += &quot;\n&quot;</span>
+<span class="fc" id="L409">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L410">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L411">		message += &quot;\n&quot;</span>
+<span class="fc" id="L412">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L413">						&quot;7&quot;);</span>
+<span class="fc" id="L414">		message += &quot;\n&quot; + Message.DESCENDRE.getMessage();</span>
+<span class="fc" id="L415">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L417">	}</span>
+
+	@Test
+	public void appelAscenseurChangementSens() {
+<span class="fc" id="L421">		sansChangementSens7_1();</span>
+<span class="fc" id="L422">		Logger.clearLog();</span>
+<span class="fc" id="L423">		resetIUG();</span>
+<span class="fc" id="L424">		resetCabine();</span>
+<span class="fc" id="L425">		avecChangementSens7_2();</span>
+<span class="fc" id="L426">		resetCabine();</span>
+<span class="fc" id="L427">		Logger.clearLog();</span>
+<span class="fc" id="L428">		resetIUG();</span>
+<span class="fc" id="L429">		avec2ChangementSens7_3();</span>
+<span class="fc" id="L430">	}</span>
+
+	private void sansChangementSens7_1() {
+		Demande d;
+<span class="fc" id="L434">		Demande d2 = new Demande(4, Sens.DESCENTE);</span>
+<span class="fc" id="L435">		dc = new Controller(cabine, iug, 8, 7, Sens.INDEFINI);</span>
+<span class="fc" id="L436">		d = new Demande(1, Sens.INDEFINI);</span>
+<span class="fc" id="L437">		dc.demander(d);</span>
+<span class="fc" id="L438">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L439">		dc.demander(d2);</span>
+<span class="fc" id="L440">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L441">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L442">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L443">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L444">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L445">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L446">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L447">		message += &quot;\n&quot; + Message.DESCENDRE.getMessage();</span>
+<span class="fc" id="L448">		message += &quot;\n&quot;</span>
+<span class="fc" id="L449">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L450">						&quot;6&quot;);</span>
+<span class="fc" id="L451">		message += &quot;\n&quot;</span>
+<span class="fc" id="L452">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L453">		message += &quot;\n&quot;</span>
+<span class="fc" id="L454">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L455">						&quot;5&quot;);</span>
+<span class="fc" id="L456">		message += &quot;\n&quot;</span>
+<span class="fc" id="L457">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L458">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L459">		message += &quot;\n&quot;</span>
+<span class="fc" id="L460">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L461">						&quot;4&quot;);</span>
+		
+<span class="fc" id="L463">		message += &quot;\n&quot;</span>
+<span class="fc" id="L464">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L465">						&quot;3&quot;);</span>
+<span class="fc" id="L466">		message += &quot;\n&quot;</span>
+<span class="fc" id="L467">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L468">						&quot;2&quot;);</span>
+<span class="fc" id="L469">		message += &quot;\n&quot;</span>
+<span class="fc" id="L470">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L471">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L472">		message += &quot;\n&quot;</span>
+<span class="fc" id="L473">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L474">						&quot;1&quot;);</span>
+		
+<span class="fc" id="L476">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L478">	}</span>
+
+	private void avecChangementSens7_2() {
+		Demande d;
+<span class="fc" id="L482">		Demande d2 = new Demande(7, Sens.DESCENTE);</span>
+<span class="fc" id="L483">		dc = new Controller(cabine, iug, 8, 7, Sens.INDEFINI);</span>
+<span class="fc" id="L484">		d = new Demande(4, Sens.INDEFINI);</span>
+<span class="fc" id="L485">		dc.demander(d);</span>
+<span class="fc" id="L486">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L487">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L488">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L489">		dc.demander(d2);</span>
+<span class="fc" id="L490">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L491">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L492">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L493">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L494">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L495">		message += &quot;\n&quot; + Message.DESCENDRE.getMessage();</span>
+<span class="fc" id="L496">		message += &quot;\n&quot;</span>
+<span class="fc" id="L497">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L498">						&quot;6&quot;);</span>
+<span class="fc" id="L499">		message += &quot;\n&quot;</span>
+<span class="fc" id="L500">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L501">						&quot;5&quot;);</span>
+<span class="fc" id="L502">		message += &quot;\n&quot;</span>
+<span class="fc" id="L503">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L504">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L505">		message += &quot;\n&quot;</span>
+<span class="fc" id="L506">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L507">						&quot;4&quot;);</span>
+		
+<span class="fc" id="L509">		message += &quot;\n&quot;</span>
+<span class="fc" id="L510">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L511">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L512">		message += &quot;\n&quot;</span>
+<span class="fc" id="L513">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L514">						&quot;5&quot;);</span>
+<span class="fc" id="L515">		message += &quot;\n&quot;</span>
+<span class="fc" id="L516">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L517">						&quot;6&quot;);</span>
+<span class="fc" id="L518">		message += &quot;\n&quot;</span>
+<span class="fc" id="L519">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L520">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L521">		message += &quot;\n&quot;</span>
+<span class="fc" id="L522">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L523">						&quot;7&quot;);</span>
+	
+<span class="fc" id="L525">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L527">	}</span>
+
+	private void avec2ChangementSens7_3() {
+<span class="fc" id="L530">		Demande d = new Demande(4, Sens.INDEFINI);</span>
+		
+<span class="fc" id="L532">		Demande d2 = new Demande(7, Sens.DESCENTE);</span>
+<span class="fc" id="L533">		Demande d3 = new Demande(2, Sens.DESCENTE);</span>
+<span class="fc" id="L534">		Demande d4 = new Demande(1, Sens.INDEFINI);</span>
+<span class="fc" id="L535">		dc = new Controller(cabine, iug, 8, 7, Sens.INDEFINI);</span>
+<span class="fc" id="L536">		dc.demander(d);</span>
+<span class="fc" id="L537">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L538">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L539">		dc.demander(d2);</span>
+<span class="fc" id="L540">		dc.demander(d3);</span>
+<span class="fc" id="L541">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L542">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L543">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L544">		dc.demander(d4);</span>
+<span class="fc" id="L545">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L546">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L547">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L548">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L549">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L550">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L551">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L552">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L553">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L554">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L555">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L556">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L557">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L558">		message += &quot;\n&quot; + Message.DESCENDRE.getMessage();</span>
+<span class="fc" id="L559">		message += &quot;\n&quot;</span>
+<span class="fc" id="L560">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L561">						&quot;6&quot;);</span>
+<span class="fc" id="L562">		message += &quot;\n&quot;</span>
+<span class="fc" id="L563">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L564">						&quot;5&quot;);</span>
+<span class="fc" id="L565">		message += &quot;\n&quot;</span>
+<span class="fc" id="L566">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L567">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L568">		message += &quot;\n&quot;</span>
+<span class="fc" id="L569">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L570">		message += &quot;\n&quot;</span>
+<span class="fc" id="L571">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d3);</span>
+<span class="fc" id="L572">		message += &quot;\n&quot;</span>
+<span class="fc" id="L573">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L574">						&quot;4&quot;);</span>
+	
+<span class="fc" id="L576">		message += &quot;\n&quot;</span>
+<span class="fc" id="L577">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L578">						&quot;3&quot;);</span>
+<span class="fc" id="L579">		message += &quot;\n&quot;</span>
+<span class="fc" id="L580">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d3);</span>
+<span class="fc" id="L581">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+		
+<span class="fc" id="L583">		message += &quot;\n&quot;</span>
+<span class="fc" id="L584">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L585">						&quot;2&quot;);</span>
+<span class="fc" id="L586">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L587">		message += &quot;\n&quot;</span>
+<span class="fc" id="L588">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d4);</span>
+	
+<span class="fc" id="L590">		message += &quot;\n&quot;</span>
+<span class="fc" id="L591">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L592">						&quot;3&quot;);</span>
+		
+<span class="fc" id="L594">		message += &quot;\n&quot;</span>
+<span class="fc" id="L595">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L596">						&quot;4&quot;);</span>
+	
+<span class="fc" id="L598">		message += &quot;\n&quot;</span>
+<span class="fc" id="L599">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L600">						&quot;5&quot;);</span>
+<span class="fc" id="L601">		message += &quot;\n&quot;</span>
+<span class="fc" id="L602">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L603">						&quot;6&quot;);</span>
+<span class="fc" id="L604">		message += &quot;\n&quot;</span>
+<span class="fc" id="L605">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L606">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L607">		message += &quot;\n&quot;</span>
+<span class="fc" id="L608">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L609">						&quot;7&quot;);</span>
+<span class="fc" id="L610">		message += &quot;\n&quot; + Message.DESCENDRE.getMessage();</span>
+<span class="fc" id="L611">		message += &quot;\n&quot;</span>
+<span class="fc" id="L612">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L613">						&quot;6&quot;);</span>
+	
+<span class="fc" id="L615">		message += &quot;\n&quot;</span>
+<span class="fc" id="L616">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L617">						&quot;5&quot;);</span>
+<span class="fc" id="L618">		message += &quot;\n&quot;</span>
+<span class="fc" id="L619">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L620">						&quot;4&quot;);</span>
+<span class="fc" id="L621">		message += &quot;\n&quot;</span>
+<span class="fc" id="L622">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L623">						&quot;3&quot;);</span>
+<span class="fc" id="L624">		message += &quot;\n&quot;</span>
+<span class="fc" id="L625">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L626">						&quot;2&quot;);</span>
+<span class="fc" id="L627">		message += &quot;\n&quot;</span>
+<span class="fc" id="L628">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d4);</span>
+<span class="fc" id="L629">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L630">		message += &quot;\n&quot;</span>
+<span class="fc" id="L631">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L632">						&quot;1&quot;);</span>
+	
+<span class="fc" id="L634">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L636">	}</span>
+
+	@Test
+	public void deuxAppelMemePalier() {
+<span class="fc" id="L640">		ascenseurMonte8_1();</span>
+<span class="fc" id="L641">	}</span>
+
+	private void ascenseurMonte8_1() {
+<span class="fc" id="L644">		Demande d = new Demande(5, Sens.INDEFINI);</span>
+<span class="fc" id="L645">		Demande d2 = new Demande(4, Sens.MONTEE);</span>
+<span class="fc" id="L646">		Demande d3 = new Demande(4, Sens.DESCENTE);</span>
+<span class="fc" id="L647">		dc = new Controller(cabine, iug, 8, 1, Sens.INDEFINI);</span>
+<span class="fc" id="L648">		dc.demander(d);</span>
+<span class="fc" id="L649">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L650">		dc.demander(d2);</span>
+<span class="fc" id="L651">		dc.demander(d3);</span>
+<span class="fc" id="L652">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L653">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L654">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L655">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L656">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L657">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L658">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L659">		message += &quot;\n&quot;</span>
+<span class="fc" id="L660">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L661">						&quot;2&quot;);</span>
+<span class="fc" id="L662">		message += &quot;\n&quot;</span>
+<span class="fc" id="L663">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L664">		message += &quot;\n&quot;</span>
+<span class="fc" id="L665">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d3);</span>
+<span class="fc" id="L666">		message += &quot;\n&quot;</span>
+<span class="fc" id="L667">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L668">						&quot;3&quot;);</span>
+<span class="fc" id="L669">		message += &quot;\n&quot;</span>
+<span class="fc" id="L670">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L671">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L672">		message += &quot;\n&quot;</span>
+<span class="fc" id="L673">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L674">						&quot;4&quot;);</span>
+<span class="fc" id="L675">		message += &quot;\n&quot;</span>
+<span class="fc" id="L676">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L677">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L678">		message += &quot;\n&quot;</span>
+<span class="fc" id="L679">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L680">						&quot;5&quot;);</span>
+	
+<span class="fc" id="L682">		message += &quot;\n&quot; + Message.DESCENDRE.getMessage();</span>
+<span class="fc" id="L683">		message += &quot;\n&quot;</span>
+<span class="fc" id="L684">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d3);</span>
+<span class="fc" id="L685">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L686">		message += &quot;\n&quot;</span>
+<span class="fc" id="L687">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L688">						&quot;4&quot;);</span>
+
+<span class="fc" id="L690">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L692">	}</span>
+
+	@Test
+	public void deuxAppelMemeEtage() {
+<span class="fc" id="L696">		memeSens9_1();</span>
+<span class="fc" id="L697">		resetCabine();</span>
+<span class="fc" id="L698">		resetIUG();</span>
+<span class="fc" id="L699">		Logger.clearLog();</span>
+<span class="fc" id="L700">		sensDifferent9_2();</span>
+
+<span class="fc" id="L702">	}</span>
+
+	private void memeSens9_1() {
+<span class="fc" id="L705">		Demande d = new Demande(3, Sens.INDEFINI);</span>
+<span class="fc" id="L706">		Demande d2 = new Demande(3, Sens.MONTEE);</span>
+<span class="fc" id="L707">		dc = new Controller(cabine, iug, 8, 0, Sens.INDEFINI);</span>
+<span class="fc" id="L708">		dc.demander(d);</span>
+<span class="fc" id="L709">		dc.demander(d2);</span>
+<span class="fc" id="L710">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L711">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L712">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L713">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L714">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L715">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L716">		message += &quot;\n&quot;</span>
+<span class="fc" id="L717">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d2);</span>
+	
+<span class="fc" id="L719">		message += &quot;\n&quot;</span>
+<span class="fc" id="L720">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L721">						&quot;1&quot;);</span>
+<span class="fc" id="L722">		message += &quot;\n&quot;</span>
+<span class="fc" id="L723">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L724">						&quot;2&quot;);</span>
+<span class="fc" id="L725">		message += &quot;\n&quot;</span>
+<span class="fc" id="L726">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L727">		message += &quot;\n&quot;</span>
+<span class="fc" id="L728">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+
+<span class="fc" id="L730">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L731">		message += &quot;\n&quot;</span>
+<span class="fc" id="L732">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L733">						&quot;3&quot;);</span>
+		
+<span class="fc" id="L735">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L737">	}</span>
+
+	private void sensDifferent9_2() {
+<span class="fc" id="L740">		Demande d = new Demande(3, Sens.INDEFINI);</span>
+<span class="fc" id="L741">		Demande d2 = new Demande(3, Sens.DESCENTE);</span>
+<span class="fc" id="L742">		Demande d3 = new Demande(4, Sens.INDEFINI);</span>
+<span class="fc" id="L743">		dc = new Controller(cabine, iug, 8, 0, Sens.INDEFINI);</span>
+<span class="fc" id="L744">		dc.demander(d);</span>
+<span class="fc" id="L745">		dc.demander(d2);</span>
+<span class="fc" id="L746">		dc.demander(d3);</span>
+<span class="fc" id="L747">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L748">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L749">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L750">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L751">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L752">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L753">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L754">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L755">		message += &quot;\n&quot;</span>
+<span class="fc" id="L756">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L757">		message += &quot;\n&quot;</span>
+<span class="fc" id="L758">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d3);</span>
+		
+<span class="fc" id="L760">		message += &quot;\n&quot;</span>
+<span class="fc" id="L761">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L762">						&quot;1&quot;);</span>
+<span class="fc" id="L763">		message += &quot;\n&quot;</span>
+<span class="fc" id="L764">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L765">						&quot;2&quot;);</span>
+<span class="fc" id="L766">		message += &quot;\n&quot;</span>
+<span class="fc" id="L767">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L768">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L769">		message += &quot;\n&quot;</span>
+<span class="fc" id="L770">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L771">						&quot;3&quot;);</span>
+<span class="fc" id="L772">		message += &quot;\n&quot;</span>
+<span class="fc" id="L773">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d3);</span>
+<span class="fc" id="L774">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L775">		message += &quot;\n&quot;</span>
+<span class="fc" id="L776">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L777">						&quot;4&quot;);</span>
+	
+<span class="fc" id="L779">		message += &quot;\n&quot; + Message.DESCENDRE.getMessage();</span>
+<span class="fc" id="L780">		message += &quot;\n&quot;</span>
+<span class="fc" id="L781">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L782">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L783">		message += &quot;\n&quot;</span>
+<span class="fc" id="L784">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L785">						&quot;3&quot;);</span>
+		
+<span class="fc" id="L787">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L789">	}</span>
+
+	@Test
+	public void appelEtageEnCoursService() {
+<span class="fc" id="L793">		appelExInt10_1();</span>
+<span class="fc" id="L794">		resetIUG();</span>
+<span class="fc" id="L795">		Logger.clearLog();</span>
+<span class="fc" id="L796">		this.resetCabine();</span>
+<span class="fc" id="L797">		appelInterieur10_2();</span>
+<span class="fc" id="L798">		resetIUG();</span>
+<span class="fc" id="L799">		Logger.clearLog();</span>
+<span class="fc" id="L800">		this.resetCabine();</span>
+<span class="fc" id="L801">		appelExtMemeDirection10_3();</span>
+<span class="fc" id="L802">		resetIUG();</span>
+<span class="fc" id="L803">		Logger.clearLog();</span>
+<span class="fc" id="L804">		this.resetCabine();</span>
+<span class="fc" id="L805">		appelExtDifDirection10_4();</span>
+<span class="fc" id="L806">	}</span>
+
+	private void appelExInt10_1() {
+<span class="fc" id="L809">		Demande d = new Demande(3, Sens.INDEFINI);</span>
+<span class="fc" id="L810">		Demande d2 = new Demande(3, Sens.DESCENTE);</span>
+<span class="fc" id="L811">		dc = new Controller(cabine, iug, 8, 1, Sens.INDEFINI);</span>
+<span class="fc" id="L812">		dc.demander(d);</span>
+<span class="fc" id="L813">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L814">		dc.demander(d2);</span>
+<span class="fc" id="L815">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L816">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L817">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L818">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L819">		message += &quot;\n&quot;</span>
+<span class="fc" id="L820">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L821">						&quot;2&quot;);</span>
+
+<span class="fc" id="L823">		message += &quot;\n&quot;</span>
+<span class="fc" id="L824">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+
+<span class="fc" id="L826">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+
+<span class="fc" id="L828">		message += &quot;\n&quot;</span>
+<span class="fc" id="L829">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L830">		message += &quot;\n&quot;</span>
+<span class="fc" id="L831">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L832">						&quot;3&quot;);</span>
+<span class="fc" id="L833">		message += &quot;\n&quot;</span>
+<span class="fc" id="L834">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);</span>
+
+<span class="fc" id="L836">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L838">	}</span>
+
+	private void appelInterieur10_2() {
+<span class="fc" id="L841">		Demande d = new Demande(3, Sens.INDEFINI);</span>
+<span class="fc" id="L842">		Demande d2 = new Demande(3, Sens.INDEFINI);</span>
+<span class="fc" id="L843">		dc = new Controller(cabine, iug, 8, 1, Sens.INDEFINI);</span>
+<span class="fc" id="L844">		dc.demander(d);</span>
+<span class="fc" id="L845">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L846">		dc.demander(d2);</span>
+<span class="fc" id="L847">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L848">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L849">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L850">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L851">		message += &quot;\n&quot;</span>
+<span class="fc" id="L852">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L853">						&quot;2&quot;);</span>
+
+<span class="fc" id="L855">		message += &quot;\n&quot;</span>
+<span class="fc" id="L856">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+
+<span class="fc" id="L858">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+
+<span class="fc" id="L860">		message += &quot;\n&quot;</span>
+<span class="fc" id="L861">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L862">		message += &quot;\n&quot;</span>
+<span class="fc" id="L863">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L864">						&quot;3&quot;);</span>
+<span class="fc" id="L865">		message += &quot;\n&quot;</span>
+<span class="fc" id="L866">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L867">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L869">	}</span>
+
+	private void appelExtMemeDirection10_3() {
+<span class="fc" id="L872">		Demande d = new Demande(3, Sens.MONTEE);</span>
+<span class="fc" id="L873">		Demande d2 = new Demande(3, Sens.MONTEE);</span>
+<span class="fc" id="L874">		dc = new Controller(cabine, iug, 8, 1, Sens.INDEFINI);</span>
+<span class="fc" id="L875">		dc.demander(d);</span>
+<span class="fc" id="L876">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L877">		dc.demander(d2);</span>
+<span class="fc" id="L878">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L879">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L880">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L881">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L882">		message += &quot;\n&quot;</span>
+<span class="fc" id="L883">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L884">						&quot;2&quot;);</span>
+<span class="fc" id="L885">		message += &quot;\n&quot;</span>
+<span class="fc" id="L886">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);</span>
+		
+<span class="fc" id="L888">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L889">		message += &quot;\n&quot;</span>
+<span class="fc" id="L890">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L891">						&quot;3&quot;);</span>
+<span class="fc" id="L892">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L894">	}</span>
+
+	private void appelExtDifDirection10_4() {
+<span class="fc" id="L897">		Demande d = new Demande(3, Sens.MONTEE);</span>
+<span class="fc" id="L898">		Demande d2 = new Demande(3, Sens.DESCENTE);</span>
+<span class="fc" id="L899">		dc = new Controller(cabine, iug, 8, 1, Sens.INDEFINI);</span>
+<span class="fc" id="L900">		dc.demander(d);</span>
+<span class="fc" id="L901">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L902">		dc.demander(d2);</span>
+<span class="fc" id="L903">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L904">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L905">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L906">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L907">		message += &quot;\n&quot;</span>
+<span class="fc" id="L908">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L909">						&quot;2&quot;);</span>
+		
+<span class="fc" id="L911">		message += &quot;\n&quot;</span>
+<span class="fc" id="L912">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L913">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L914">		message += &quot;\n&quot; + String.format(Message.ALLUMER_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L915">		message += &quot;\n&quot;</span>
+<span class="fc" id="L916">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L917">						&quot;3&quot;);</span>
+<span class="fc" id="L918">		message += &quot;\n&quot;</span>
+<span class="fc" id="L919">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);</span>
+		
+<span class="fc" id="L921">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L923">	}</span>
+
+	@Test
+	public void arretUrgence() {
+<span class="fc" id="L927">		Demande d = new Demande(3, Sens.INDEFINI);</span>
+<span class="fc" id="L928">		Demande d2 = new Demande(3, Sens.DESCENTE);</span>
+<span class="fc" id="L929">		Demande d3 = new Demande(4, Sens.INDEFINI);</span>
+<span class="fc" id="L930">		dc = new Controller(cabine, iug, 8, 0, Sens.INDEFINI);</span>
+<span class="fc" id="L931">		dc.demander(d);</span>
+<span class="fc" id="L932">		dc.demander(d2);</span>
+<span class="fc" id="L933">		dc.demander(d3);</span>
+<span class="fc" id="L934">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L935">		dc.signalerChangementDEtage();</span>
+<span class="fc" id="L936">		dc.arretDUrgence();</span>
+<span class="fc" id="L937">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L938">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L939">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L940">		message += &quot;\n&quot;+ String.format(Message.ALLUMER_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L941">		message += &quot;\n&quot;</span>
+<span class="fc" id="L942">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d3);</span>
+	
+<span class="fc" id="L944">		message += &quot;\n&quot;</span>
+<span class="fc" id="L945">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L946">						&quot;1&quot;);</span>
+<span class="fc" id="L947">		message += &quot;\n&quot;</span>
+<span class="fc" id="L948">				+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),</span>
+<span class="fc" id="L949">						&quot;2&quot;);</span>
+<span class="fc" id="L950">		message += &quot;\n&quot;</span>
+<span class="fc" id="L951">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L952">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+	
+<span class="fc" id="L954">		message += &quot;\n&quot;</span>
+<span class="fc" id="L955">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L956">		message += &quot;\n&quot;</span>
+<span class="fc" id="L957">				+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d3);</span>
+<span class="fc" id="L958">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L960">	}</span>
+
+	@Test
+	public void repriseArretUrgence() {
+<span class="fc" id="L964">		Demande d = new Demande(3, Sens.MONTEE);</span>
+<span class="fc" id="L965">		Demande d2 = new Demande(3, Sens.DESCENTE);</span>
+<span class="fc" id="L966">		Demande d3 = new Demande(4, Sens.INDEFINI);</span>
+<span class="fc" id="L967">		dc = new Controller(cabine, iug, 8, 3, Sens.INDEFINI);</span>
+<span class="fc" id="L968">		dc.demander(d);</span>
+<span class="fc" id="L969">		dc.demander(d2);</span>
+<span class="fc" id="L970">		dc.demander(d3);</span>
+<span class="fc" id="L971">		dc.signalerChangementDEtage();</span>
+
+<span class="fc" id="L973">		String message = &quot;\n&quot;</span>
+<span class="fc" id="L974">				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L975">		message += &quot;\n&quot;+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d);</span>
+<span class="fc" id="L976">		message += &quot;\n&quot;+ String.format(Message.ALLUMER_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L977">		message += &quot;\n&quot;+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);</span>
+<span class="fc" id="L978">		message += &quot;\n&quot;+ String.format(Message.ALLUMER_BOUTON.getMessage(), d3);</span>
+	
+<span class="fc" id="L980">		message += &quot;\n&quot; + Message.MONTER.getMessage();</span>
+<span class="fc" id="L981">		message += &quot;\n&quot;+ String.format(Message.ETEINDRE_BOUTON.getMessage(), d3);</span>
+<span class="fc" id="L982">		message += &quot;\n&quot; + Message.ARRET_PROCHAIN.getMessage();</span>
+<span class="fc" id="L983">		message += &quot;\n&quot;+ String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(),&quot;4&quot;);</span>
+
+<span class="fc" id="L985">		assertEquals(message, Logger.getLog());</span>
+
+<span class="fc" id="L987">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>test (22 mars 2016 00:11:19)</div></body></html>

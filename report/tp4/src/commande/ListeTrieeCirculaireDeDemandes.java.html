@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ListeTrieeCirculaireDeDemandes.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">test (22 mars 2016 00:11:19)</a> &gt; <a href="../../index.html" class="el_group">tp4</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">commande</a> &gt; <span class="el_source">ListeTrieeCirculaireDeDemandes.java</span></div><h1>ListeTrieeCirculaireDeDemandes.java</h1><pre class="source lang-java linenums">package commande;
+
+import outils.Demande;
+import outils.Sens;
+
+/**
+ * Une IListeCirculaire represente une liste circulaire triee de {@link Demande}.
+ * @author Christophe
+ */
+public class ListeTrieeCirculaireDeDemandes implements IListeTrieeCirculaire&lt;Demande&gt; {
+	
+	/**
+	 * Nombre de paliers géré par la liste 
+	 */
+	private int nbPaliers;
+	
+	/**
+	 * Nombre d'éléments effectivements présents dans la liste
+	 */
+	private int taille;
+	
+	/**
+	 * Tableau de booléen, l'indice représentant l'étage de la demande,
+	 * et la valeur à l'indice représentant si la demande est présente ou non.
+	 * Ce tableau ne contient que les demandes en montée.
+	 */
+	private boolean[] listeMontee;
+	
+	/**
+	 * Tableau de booléen, l'indice représentant l'étage de la demande,
+	 * et la valeur à l'indice représentant si la demande est présente ou non.
+	 * Ce tableau ne contient que les demandes en descente.
+	 */
+	private boolean[] listeDescente;
+	
+	/**
+	 * Constructeur avec un nombre de paliers spécifié
+	 * @param nbPaliers - Nombre de paliers
+	 */
+<span class="fc" id="L40">	public ListeTrieeCirculaireDeDemandes(int nbPaliers) {</span>
+<span class="fc" id="L41">		this.taille = 0;</span>
+<span class="fc" id="L42">		this.nbPaliers = nbPaliers;</span>
+<span class="fc" id="L43">		this.listeMontee = new boolean[nbPaliers];</span>
+<span class="fc" id="L44">		this.listeDescente = new boolean[nbPaliers];</span>
+		
+		// Permet d'initialiser toutes valeurs des tableaux à false
+<span class="fc" id="L47">		this.vider();</span>
+<span class="fc" id="L48">	}</span>
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int taille() {
+<span class="fc" id="L55">		return this.taille;</span>
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean estVide() {
+<span class="fc bfc" id="L63" title="All 2 branches covered.">		return this.taille == 0;</span>
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void vider() {
+<span class="fc bfc" id="L71" title="All 2 branches covered.">		for (int i = 0; i &lt; listeMontee.length - 1; i++) {</span>
+<span class="fc" id="L72">			this.listeMontee[i] = false;</span>
+<span class="fc" id="L73">			this.listeDescente[i] = false;</span>
+		}
+		
+<span class="fc" id="L76">		this.taille = 0;</span>
+<span class="fc" id="L77">	}</span>
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean contient(Demande e) {
+<span class="fc bfc" id="L84" title="All 2 branches covered.">		if (e.estIndefini())</span>
+<span class="fc" id="L85">			throw new IllegalArgumentException(&quot;Le sens de la demande ne peut être indéfinis&quot;);</span>
+		
+<span class="fc bfc" id="L87" title="All 2 branches covered.">		if (e.enMontee()) {</span>
+<span class="fc" id="L88">			return this.listeMontee[e.etage()];</span>
+		} else {
+<span class="fc" id="L90">			return this.listeDescente[e.etage()];</span>
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void inserer(Demande e) {
+<span class="fc bfc" id="L99" title="All 2 branches covered.">		if (isOutOfBound(e))</span>
+<span class="fc" id="L100">			throw new IllegalArgumentException(&quot;Cette demande est hors des limites du système&quot;);</span>
+		
+<span class="fc bfc" id="L102" title="All 2 branches covered.">		if (!contient(e)) {</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">			if (e.enMontee()) {</span>
+<span class="fc" id="L104">				this.listeMontee[e.etage()] = true;</span>
+<span class="fc" id="L105">			} else {</span>
+<span class="fc" id="L106">				this.listeDescente[e.etage()] = true;</span>
+			}
+			
+<span class="fc" id="L109">			this.taille++;</span>
+		}
+		
+<span class="fc" id="L112">	}</span>
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void supprimer(Demande e) {
+<span class="fc bfc" id="L119" title="All 2 branches covered.">		if (!contient(e))</span>
+<span class="fc" id="L120">			throw new IllegalArgumentException(&quot;La demande n'existe pas dans la liste&quot;);</span>
+		
+<span class="fc bfc" id="L122" title="All 2 branches covered.">		if (e.enMontee()) {</span>
+<span class="fc" id="L123">			this.listeMontee[e.etage()] = false;</span>
+<span class="fc" id="L124">		} else {</span>
+<span class="fc" id="L125">			this.listeDescente[e.etage()] = false;</span>
+		}
+		
+<span class="fc" id="L128">		this.taille--;</span>
+		
+<span class="fc" id="L130">	}</span>
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Demande suivantDe(Demande courant) {
+<span class="fc bfc" id="L137" title="All 2 branches covered.">		if (estVide())</span>
+<span class="fc" id="L138">			return null;</span>
+		
+<span class="fc bfc" id="L140" title="All 2 branches covered.">		if (courant.enMontee()) {</span>
+			/* On part dans le sens de la demande courante */
+<span class="fc bfc" id="L142" title="All 2 branches covered.">			for (int i = courant.etage(); i &lt; listeMontee.length; i++) {</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">				if (listeMontee[i])</span>
+<span class="fc" id="L144">					return new Demande(i, Sens.MONTEE);</span>
+			}
+			
+			/* Si on a pas encore touvé, on part dans l'autre sens */
+<span class="fc bfc" id="L148" title="All 2 branches covered.">			for (int i = listeDescente.length - 1; i &gt; 0; i--) {</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">				if (listeDescente[i])</span>
+<span class="fc" id="L150">					return new Demande(i, Sens.DESCENTE);</span>
+			}
+			
+			/* Si on a toujours pas trouvé, on parcours le reste du premier tableau */
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">			for (int i = 0; i &lt; courant.etage(); i++) {</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">				if (listeMontee[i])</span>
+<span class="fc" id="L156">					return new Demande(i, Sens.MONTEE);</span>
+			}
+<span class="nc" id="L158">		} else {</span>
+			/* On part dans le sens de la demande courante */
+<span class="fc bfc" id="L160" title="All 2 branches covered.">			for (int i = courant.etage(); i &gt; 0; i--) {</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">				if (listeDescente[i])</span>
+<span class="fc" id="L162">					return new Demande(i, Sens.DESCENTE);</span>
+			}
+			
+			/* Si on a pas encore touvé, on part dans l'autre sens */
+<span class="fc bfc" id="L166" title="All 2 branches covered.">			for (int i = 0; i &lt; listeMontee.length; i++) {</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">				if (listeMontee[i])</span>
+<span class="fc" id="L168">					return new Demande(i, Sens.MONTEE);</span>
+			}
+			
+			/* Si on a toujours pas trouvé, on parcours le reste du premier tableau */
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">			for (int i = listeDescente.length - 1; i &gt; courant.etage(); i--) {</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">				if (listeDescente[i])</span>
+<span class="fc" id="L174">					return new Demande(i, Sens.DESCENTE);</span>
+			}
+		}
+		
+<span class="nc" id="L178">		return null;</span>
+	}
+	
+	/**
+	 * Retourne une représentation textuelle de la liste triée.
+	 * @return Chaine de caractères réprésentant la représentation textuelle de la liste 
+	 */
+	@Override
+	public String toString() {
+<span class="fc" id="L187">		StringBuilder str = new StringBuilder(&quot;[&quot;);</span>
+<span class="fc" id="L188">		boolean first = true;</span>
+		
+<span class="fc bfc" id="L190" title="All 2 branches covered.">		for (int i = 0; i &lt; listeMontee.length; i++) {</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">			if (this.listeMontee[i]) {</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">				if (first)</span>
+<span class="fc" id="L193">					first = false;</span>
+				else
+<span class="fc" id="L195">					str.append(&quot;,&quot;);</span>
+				
+<span class="fc" id="L197">				str.append(i);</span>
+<span class="fc" id="L198">				str.append(Sens.MONTEE.toString());</span>
+			}
+		}
+		
+<span class="fc bfc" id="L202" title="All 2 branches covered.">		for (int i = listeDescente.length - 1; i &gt; 0; i--) {</span>
+<span class="fc bfc" id="L203" title="All 2 branches covered.">			if (this.listeDescente[i]) {</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">				if (first)</span>
+<span class="fc" id="L205">					first = false;</span>
+				else
+<span class="fc" id="L207">					str.append(&quot;,&quot;);</span>
+				
+<span class="fc" id="L209">				str.append(i);</span>
+<span class="fc" id="L210">				str.append(Sens.DESCENTE.toString());</span>
+			}
+		}
+		
+<span class="fc" id="L214">		str.append(&quot;]&quot;);</span>
+<span class="fc" id="L215">		return str.toString();</span>
+	}
+	
+	/**
+	 * Vérifie que la demande ne soit pas hors des limites du système.
+	 * C'est à dire un étage compris dans le nombre de paliers donnés
+	 * et une direction cohérente en fonction de l'étage.
+	 * &lt;i&gt;Exemple : Demande(0, Sens.DESCENTE) -&gt; impossible&lt;/pre&gt; 
+	 * @param e - Demande à vérifier
+	 * @return Vrai si la demande est hors des limites du système
+	 */
+	private boolean isOutOfBound(Demande e) {
+<span class="fc bfc" id="L227" title="All 4 branches covered.">		return e.etage() &lt; 0</span>
+<span class="fc bfc" id="L228" title="All 2 branches covered.">				|| e.etage() &gt;= nbPaliers</span>
+<span class="fc bfc" id="L229" title="All 4 branches covered.">			 	|| (e.enDescente() &amp;&amp; e.etage() &lt;= 0)</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">				|| (e.enMontee() &amp;&amp; e.etage() &gt;= nbPaliers - 1);</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>test (22 mars 2016 00:11:19)</div></body></html>

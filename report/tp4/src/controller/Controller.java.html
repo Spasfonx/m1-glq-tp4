@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Controller.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">test (22 mars 2016 00:11:19)</a> &gt; <a href="../../index.html" class="el_group">tp4</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">controller</a> &gt; <span class="el_source">Controller.java</span></div><h1>Controller.java</h1><pre class="source lang-java linenums">package controller;
+
+import iug.IIUG;
+import outils.Demande;
+import outils.Logger;
+import outils.Message;
+import outils.Sens;
+import cabine.ICabine;
+import commande.ListeTrieeCirculaireDeDemandes;
+
+/**
+ * Classe Controller permettant de gérer les demandes entre l'iug et la cabine. 
+ * @author Christophe
+ */
+public class Controller implements IController {
+
+	/**
+	 * Nombre d'étage maximal que gère le controlleur.
+	 */
+	private int nombreEtages;
+	
+	/**
+	 * Position à l'instant actuel de la cabine.
+	 */
+	private int position;
+	
+	/**
+	 * Sens courant de la cabine.
+	 */
+	private Sens sens;
+	
+	/**
+	 * Liste des demandes en attente.
+	 */
+	private ListeTrieeCirculaireDeDemandes stockDemandes;
+	
+	/**
+	 * Reférence à l'objet représentant l'iug.
+	 */
+	private IIUG iug;
+	
+	/**
+	 * Reférence à l'objet représentant la cabine.
+	 */
+	private ICabine cabine;
+	
+	/**
+	 * Etat dans lequel se trouve la cabine.
+	 * @see controller.EnumEtatController
+	 */
+	private EnumEtatController etat;
+	
+	/**
+	 * Constructeur de la classe. 
+	 * @param pCabine - Lien vers la cabine
+	 * @param pIUG - Lien vers l'iug
+	 * @param pNombreEtages - Nombre d'étage maximal que gère le controlleur
+	 * @param pPosition - Position actuelle
+	 * @param pSens - Sens actuel
+	 */
+<span class="fc" id="L61">	public Controller(final ICabine pCabine, final IIUG pIUG,</span>
+			final int pNombreEtages, final int pPosition, final Sens pSens) {
+<span class="fc" id="L63">		this.nombreEtages = pNombreEtages;</span>
+<span class="fc" id="L64">		this.position = pPosition;</span>
+<span class="fc" id="L65">		this.sens = pSens;</span>
+		
+<span class="fc" id="L67">		this.cabine = pCabine;</span>
+<span class="fc" id="L68">		this.iug = pIUG;</span>
+
+<span class="fc" id="L70">		this.stockDemandes = new ListeTrieeCirculaireDeDemandes(pNombreEtages);</span>
+<span class="fc" id="L71">		this.etat = EnumEtatController.ATTENTE_DEMANDE;</span>
+<span class="fc" id="L72">	}</span>
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final void demander(final Demande pDemande) {
+<span class="fc" id="L79">		Demande demandeActuelle = new Demande(pDemande.etage(), pDemande.sens());</span>
+		
+<span class="fc bfc" id="L81" title="All 2 branches covered.">		if (EnumEtatController.ATTENTE_DEMANDE.equals(etat)) {</span>
+<span class="fc" id="L82">			this.iug.allumerBouton(demandeActuelle);</span>
+<span class="fc" id="L83">			this.stocker(demandeActuelle);</span>
+			
+			/* On initialise le sens de départ de la cabine */
+<span class="fc" id="L86">			int d = demandeActuelle.etage() - position;</span>
+			
+			/* Si c'est directement l'étage suivant */
+<span class="fc bfc" id="L89" title="All 2 branches covered.">			if (Math.abs(d) == 1) {</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">				if (d == 1) {</span>
+<span class="fc" id="L91">					this.cabine.monter();</span>
+<span class="fc" id="L92">					this.etat = EnumEtatController.MONTEE;</span>
+<span class="fc" id="L93">				} else {</span>
+<span class="fc" id="L94">					this.cabine.descendre();</span>
+<span class="fc" id="L95">					this.etat = EnumEtatController.DESCENTE;</span>
+				}
+
+<span class="fc" id="L98">				MAJSens();</span>
+				
+<span class="fc" id="L100">				this.eteindreBouton(demandeActuelle);</span>
+				
+<span class="fc" id="L102">				this.cabine.arreterProchainNiveau();</span>
+<span class="fc" id="L103">				this.etat = EnumEtatController.ARRET_ETAGE;</span>
+				
+<span class="fc" id="L105">				Logger.writeLog(Message.ARRET_PROCHAIN.getMessage());</span>
+			/* Sinon */
+<span class="fc bfc" id="L107" title="All 2 branches covered.">			} else if (demandeActuelle.etage() &gt; position) {</span>
+<span class="fc" id="L108">				this.cabine.monter();</span>
+<span class="fc" id="L109">				this.etat = EnumEtatController.MONTEE;</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">			} else if (demandeActuelle.etage() &lt; position) {</span>
+<span class="fc" id="L111">				this.cabine.descendre();</span>
+<span class="fc" id="L112">				this.etat = EnumEtatController.DESCENTE;</span>
+			} 
+			
+			/* Demande au même palier */ //TODO: VERIFIER TOUS LES CAS !!!!!
+<span class="pc bpc" id="L116" title="1 of 4 branches missed.">			if (this.position == demandeActuelle.etage() &amp;&amp; (demandeActuelle.sens().equals((this.sens))</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">					|| Sens.INDEFINI.equals(this.sens))) {</span>
+<span class="fc" id="L118">				this.eteindreBouton(demandeActuelle);</span>
+			}
+			
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">			if (!EnumEtatController.ARRET_IMMINENT.equals(this.etat)</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">					&amp;&amp; !EnumEtatController.ARRET_ETAGE.equals(this.etat)) {</span>
+<span class="fc" id="L123">				MAJSens();</span>
+			}
+<span class="fc bfc" id="L125" title="All 2 branches covered.">		} else if (EnumEtatController.ARRET_ETAGE.equals(etat)) {</span>
+			/* On vérifie que la demande ne soit pas l'étage 
+			 * sur lequel on va déjà s'arrêté */
+<span class="fc bfc" id="L128" title="All 2 branches covered.">			if (Sens.MONTEE.equals(this.sens) </span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">					&amp;&amp; (demandeActuelle.etage() != this.position + 1 </span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">						|| !demandeActuelle.sens().equals(this.sens))</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">				|| Sens.DESCENTE.equals(this.sens) </span>
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">					&amp;&amp; (demandeActuelle.etage() != this.position - 1 </span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">						|| !demandeActuelle.sens().equals(this.sens))) {</span>
+<span class="fc" id="L134">				this.iug.allumerBouton(demandeActuelle);</span>
+<span class="fc" id="L135">				stocker(demandeActuelle);</span>
+			}
+<span class="fc" id="L137">		} /*else if (EnumEtatController.ARRET_ETAGE.equals(etat)) {</span>
+			/* On vérifie que la demande ne soit pas l'étage
+			 * sur lequel on est déjà arrêté
+			if (demandeActuelle.etage() != this.position 
+					|| demandeActuelle.sens() != this.sens) {
+				this.iug.allumerBouton(demandeActuelle);
+				this.stocker(demandeActuelle);
+			}
+		} */else {
+<span class="fc" id="L146">			this.iug.allumerBouton(demandeActuelle);</span>
+<span class="fc" id="L147">			stocker(demandeActuelle);</span>
+		}
+		
+		
+<span class="fc" id="L151">	}</span>
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final void signalerChangementDEtage() {
+<span class="fc" id="L158">		MAJPosition();</span>
+		
+<span class="fc" id="L160">		Logger.writeLog(String.format(</span>
+<span class="fc" id="L161">				Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), </span>
+<span class="fc" id="L162">				this.position)</span>
+			);
+		
+<span class="fc" id="L165">		Demande demandeSuivante = interrogerStock();</span>
+		
+<span class="fc bfc" id="L167" title="All 2 branches covered.">		if ((EnumEtatController.MONTEE.equals(etat) </span>
+<span class="fc bfc" id="L168" title="All 2 branches covered.">				|| EnumEtatController.DESCENTE.equals(etat))</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">				&amp;&amp; demandeSuivante != null) {</span>
+			// On doit s'arrêter aux prochains etage (cas normal)
+<span class="fc bfc" id="L171" title="All 2 branches covered.">			if ((demandeSuivante.etage() == this.position + 1</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">					&amp;&amp; Sens.MONTEE.equals(demandeSuivante.sens()))</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">				|| (demandeSuivante.etage() == this.position - 1</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">						&amp;&amp; Sens.DESCENTE.equals(demandeSuivante.sens()))) {</span>
+<span class="fc" id="L175">				this.cabine.arreterProchainNiveau();</span>
+<span class="fc" id="L176">				this.etat = EnumEtatController.ARRET_IMMINENT;</span>
+<span class="fc" id="L177">			} </span>
+			
+			// On doit s'arrêter au prochain étage, cas extrêmes
+<span class="fc bfc" id="L180" title="All 2 branches covered.">			else if ((demandeSuivante.etage() == this.position + 1</span>
+<span class="pc bpc" id="L181" title="3 of 4 branches missed.">						&amp;&amp; (demandeSuivante.etage() == this.nombreEtages - 1 || stockDemandes.taille() &lt;= 1)</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">						&amp;&amp; Sens.DESCENTE.equals(demandeSuivante.sens()))</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">					|| (demandeSuivante.etage() == this.position - 1</span>
+<span class="pc bpc" id="L184" title="2 of 4 branches missed.">						&amp;&amp; (demandeSuivante.etage() == 0 || stockDemandes.taille() &lt;= 1) </span>
+<span class="pc bpc" id="L185" title="1 of 2 branches missed.">						&amp;&amp; Sens.MONTEE.equals(demandeSuivante.sens()))) {</span>
+<span class="fc" id="L186">				this.cabine.arreterProchainNiveau();</span>
+<span class="fc" id="L187">				this.etat = EnumEtatController.ARRET_IMMINENT;</span>
+			}
+		}
+		
+<span class="fc bfc" id="L191" title="All 2 branches covered.">		if (EnumEtatController.ARRET_IMMINENT.equals(etat)) {</span>
+<span class="fc" id="L192">			etat = EnumEtatController.ARRET_ETAGE;</span>
+
+<span class="fc" id="L194">			this.eteindreBouton(demandeSuivante);</span>
+			
+<span class="fc" id="L196">			Logger.writeLog(Message.ARRET_PROCHAIN.getMessage());</span>
+<span class="fc" id="L197">		}</span>
+		
+<span class="fc bfc" id="L199" title="All 2 branches covered.">		else if (EnumEtatController.ARRET_ETAGE.equals(etat)) {</span>
+					
+<span class="pc bpc" id="L201" title="1 of 4 branches missed.">			if (demandeSuivante != null &amp;&amp; !stockDemandes.estVide()) {</span>
+<span class="fc" id="L202">				int delta = demandeSuivante.etage() - this.position;</span>
+				
+				/*
+				 * Dans le cas où la demande suivante est l'étage directement
+				 * supérieur/inférieur
+				 */
+<span class="fc bfc" id="L208" title="All 2 branches covered.">				if (Math.abs(delta) == 1) {</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">					if (delta == 1) {</span>
+<span class="fc" id="L210">						this.cabine.monter();</span>
+<span class="fc" id="L211">						this.etat = EnumEtatController.MONTEE;</span>
+<span class="fc" id="L212">					} else {</span>
+<span class="fc" id="L213">						this.cabine.descendre();</span>
+<span class="fc" id="L214">						this.etat = EnumEtatController.DESCENTE;</span>
+					}
+				
+<span class="fc" id="L217">					MAJSens();</span>
+					
+<span class="fc" id="L219">					this.cabine.arreterProchainNiveau();</span>
+<span class="fc" id="L220">					this.etat = EnumEtatController.ARRET_ETAGE;</span>
+					
+<span class="fc" id="L222">					this.eteindreBouton(demandeSuivante);</span>
+					
+<span class="fc" id="L224">					Logger.writeLog(Message.ARRET_PROCHAIN.getMessage());</span>
+				
+				/* Dans le cas normal */
+<span class="fc" id="L227">				} else {</span>
+<span class="fc bfc" id="L228" title="All 2 branches covered.">					if (demandeSuivante.etage() &gt; this.position) {</span>
+<span class="fc" id="L229">						this.cabine.monter();</span>
+<span class="fc" id="L230">						this.etat = EnumEtatController.MONTEE;</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">					} else if (demandeSuivante.etage() &lt; this.position) {</span>
+<span class="fc" id="L232">						this.cabine.descendre();</span>
+<span class="fc" id="L233">						this.etat = EnumEtatController.DESCENTE;</span>
+<span class="fc" id="L234">					} else {</span>
+<span class="fc" id="L235">						this.eteindreBouton(demandeSuivante);</span>
+					}
+				}
+				
+<span class="fc" id="L239">			} else {</span>
+<span class="fc" id="L240">				etat = EnumEtatController.ATTENTE_DEMANDE;</span>
+			}
+			
+<span class="pc bpc" id="L243" title="1 of 2 branches missed.">			if (!EnumEtatController.ARRET_IMMINENT.equals(this.etat)</span>
+<span class="fc bfc" id="L244" title="All 2 branches covered.">					&amp;&amp; !EnumEtatController.ARRET_ETAGE.equals(this.etat)) {</span>
+<span class="fc" id="L245">				MAJSens();</span>
+			}
+			
+		}
+<span class="fc" id="L249">	}</span>
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final void arretDUrgence() {
+<span class="fc" id="L256">		this.eteindreTousBoutons();</span>
+<span class="fc" id="L257">		this.viderStock();</span>
+		
+<span class="pc bpc" id="L259" title="1 of 2 branches missed.">		if (EnumEtatController.ATTENTE_DEMANDE.equals(etat)</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">				|| EnumEtatController.ARRET_ETAGE.equals(etat)</span>
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">				|| EnumEtatController.ARRET_IMMINENT.equals(etat)) {</span>
+<span class="fc" id="L262">			this.etat = EnumEtatController.ARRET_IMMEDIAT;</span>
+<span class="pc bpc" id="L263" title="1 of 2 branches missed.">		} else if (EnumEtatController.MONTEE.equals(etat)</span>
+<span class="nc bnc" id="L264" title="All 2 branches missed.">				|| EnumEtatController.DESCENTE.equals(etat)) {</span>
+<span class="fc" id="L265">			this.etat = EnumEtatController.ARRET_IMMEDIAT;</span>
+<span class="fc" id="L266">			this.cabine.arreter();</span>
+<span class="fc" id="L267">			MAJSens();</span>
+		} 
+		
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">		if (EnumEtatController.ARRET_IMMEDIAT.equals(etat)){</span>
+<span class="fc" id="L271">			this.etat = EnumEtatController.ATTENTE_DEMANDE;</span>
+		}
+<span class="fc" id="L273">	}</span>
+	
+	/**
+	 * Renvoie la demande suivante dans le stock par rapport à la position 
+	 * et au sens actuel du controller.
+	 * @return Un objet représentant la demande suivante dans le stock,
+	 * null s'il n'y a pas d'autre demandes.
+	 */
+	private Demande interrogerStock() {
+<span class="fc" id="L282">		return stockDemandes.suivantDe(</span>
+<span class="fc" id="L283">				new Demande(this.position, sens)</span>
+			);
+	}
+	
+	/**
+	 * Stock une demande dans le stock de demande. Si le sens de la demande est
+	 * INDEFINI, on la transforme alors en MONTEE ou en DESCENTE selon les
+	 * caractéristiques de la demande et le sens courant.
+	 * 
+	 * @param pDemande
+	 *            - Demande à stocker
+	 */
+	private void stocker(final Demande pDemande) {
+		/* Transformation du sens d'une demande si elle est INDEFINI */
+<span class="fc bfc" id="L297" title="All 2 branches covered.">		if (pDemande.estIndefini()) {</span>
+			/* On test les cas bornés */
+<span class="pc bpc" id="L299" title="1 of 2 branches missed.">			if (pDemande.etage() == 0) {</span>
+<span class="nc" id="L300">				pDemande.changeSens(Sens.MONTEE);</span>
+<span class="pc bfc" id="L301" title="All 2 branches covered.">			} else if (pDemande.etage() == this.nombreEtages - 1) {</span>
+<span class="fc" id="L302">				pDemande.changeSens(Sens.DESCENTE);</span>
+			
+			/* On test les cas normaux */
+<span class="fc" id="L305">			} else {</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">				if (pDemande.etage() &gt; position) {</span>
+<span class="fc" id="L307">					pDemande.changeSens(Sens.MONTEE);</span>
+<span class="fc" id="L308">				} else { </span>
+<span class="fc" id="L309">					pDemande.changeSens(Sens.DESCENTE);</span>
+				}
+			}
+		}
+		
+<span class="fc" id="L314">		this.stockDemandes.inserer(pDemande);</span>
+			
+<span class="fc" id="L316">	}</span>
+	
+	/**
+	 * Retire la demande passée en paramètre du stock de demandes.
+	 * @param pDemande - Demande à retirer
+	 */
+	private void enleverDuStock(final Demande pDemande) {
+<span class="fc" id="L323">		this.stockDemandes.supprimer(pDemande);</span>
+<span class="fc" id="L324">	}</span>
+	
+	/**
+	 * Vide le stock de demandes.
+	 */
+	private void viderStock() {
+<span class="fc" id="L330">		this.stockDemandes.vider();</span>
+<span class="fc" id="L331">	}</span>
+	
+	/**
+	 * Met à jour la position de la cabine enregistré dans le controlleur en
+	 * fonction du sens de déplacement de la cabine.
+	 */
+	private final void MAJPosition() {
+<span class="fc bfc" id="L338" title="All 2 branches covered.">		if (Sens.MONTEE.equals(this.sens)) {</span>
+<span class="fc" id="L339">			this.position++;</span>
+<span class="pc bpc" id="L340" title="1 of 2 branches missed.">		} else if (Sens.DESCENTE.equals(this.sens)) {</span>
+<span class="fc" id="L341">			this.position--;</span>
+		}
+<span class="fc" id="L343">	}</span>
+	
+	/**
+	 * Met à jour le sens de la cabine enregistré dans le controlleur en
+	 * fonction de l'état actuel de celui-ci.
+	 */
+	private final void MAJSens() {
+<span class="fc bfc" id="L350" title="All 2 branches covered.">		if (EnumEtatController.MONTEE.equals(this.etat)) {</span>
+<span class="fc" id="L351">			this.sens = Sens.MONTEE;</span>
+<span class="fc bfc" id="L352" title="All 2 branches covered.">		} else if (EnumEtatController.DESCENTE.equals(this.etat)) {</span>
+<span class="fc" id="L353">			this.sens = Sens.DESCENTE;</span>
+<span class="fc" id="L354">		} else {</span>
+<span class="fc" id="L355">			this.sens = Sens.INDEFINI;</span>
+		}
+<span class="fc" id="L357">	}</span>
+	
+	/**
+	 * Eteint tous les boutons dans et en dehors de la cabine.
+	 */
+	private void eteindreTousBoutons() {
+<span class="fc bfc" id="L363" title="All 2 branches covered.">		for (int i = 0; i &lt; this.nombreEtages - 1; i++) {</span>
+<span class="fc" id="L364">			this.iug.eteindreBouton(new Demande(i, Sens.MONTEE));</span>
+<span class="fc" id="L365">			this.iug.eteindreBouton(new Demande(i, Sens.DESCENTE));</span>
+<span class="fc" id="L366">			this.iug.eteindreBouton(new Demande(i, Sens.INDEFINI));</span>
+		}
+<span class="fc" id="L368">	}</span>
+	
+	private void eteindreBouton(Demande d) {
+<span class="fc" id="L371">		this.enleverDuStock(d);</span>
+		
+		/*
+		 * On peux éteindre à chaque fois la demande satisfaite en plus
+		 * d'eteindre la même demande au Sens INDEFINI puisqu'on sait que si
+		 * par exemple l'étage 4 en montée est satisfait, alors on peux
+		 * eteindre et le bouton 4M et le bouton 4 dans la cabine puisque
+		 * c'est les mêmes demandes dans notre système
+		 */
+<span class="fc" id="L380">		this.iug.eteindreBouton(d);</span>
+<span class="fc" id="L381">		this.iug.eteindreBouton(new Demande(d.etage(),</span>
+<span class="fc" id="L382">				Sens.INDEFINI));</span>
+<span class="fc" id="L383">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>test (22 mars 2016 00:11:19)</div></body></html>

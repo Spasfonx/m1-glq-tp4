@@ -72,19 +72,6 @@ public class Controller implements IController {
 	}
 	
 	/**
-	 * Constructeur de la classe. Initialise la position à 0 
-	 * et le sens à INDEFINI.
-	 * @param pCabine - Lien vers la cabine
-	 * @param pIUG - Lien vers l'iug
-	 * @param pNombreEtages - Nombre d'étage maximal que 
-	 * gère le controlleur
-	 */
-	public Controller(final ICabine pCabine, final IIUG pIUG,
-			final int pNombreEtages) {
-		this(pCabine, pIUG, pNombreEtages, 0, Sens.INDEFINI);
-	}
-	
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
@@ -125,7 +112,7 @@ public class Controller implements IController {
 				this.etat = EnumEtatController.DESCENTE;
 			} 
 			
-			/* Demande au même palier */ //TODO: VERIFIER TOUS LES CAS !!!!!
+			/* Demande au même palier */
 			if (this.position == demandeActuelle.etage() && (demandeActuelle.sens().equals((this.sens))
 					|| Sens.INDEFINI.equals(this.sens))) {
 				this.eteindreBouton(demandeActuelle);

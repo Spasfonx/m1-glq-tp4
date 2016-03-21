@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ListeTrieeCirculaireDeDemandesTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">test (22 mars 2016 00:11:19)</a> &gt; <a href="../../index.html" class="el_group">tp4</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">test</a> &gt; <span class="el_source">ListeTrieeCirculaireDeDemandesTest.java</span></div><h1>ListeTrieeCirculaireDeDemandesTest.java</h1><pre class="source lang-java linenums">/**
+ * Classes de test des classes du projet ascenseur.
+ */
+package test;
+
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import outils.Demande;
+import outils.Sens;
+import commande.IListeTrieeCirculaire;
+import commande.ListeTrieeCirculaireDeDemandes;
+
+/**
+ * Classe de test de la classe {@link commande.ListeTrieeCirculaireDeDemandes}.
+ * 
+ * @author L. Torres
+ *
+ */
+<span class="fc" id="L23">public class ListeTrieeCirculaireDeDemandesTest {</span>
+
+	private IListeTrieeCirculaire&lt;Demande&gt; suite1, suite2;
+	
+	@Before
+	public void setUp() {
+<span class="fc" id="L29">		suite1 = new ListeTrieeCirculaireDeDemandes( 10);</span>
+<span class="fc" id="L30">		suite2 = new ListeTrieeCirculaireDeDemandes( 10);</span>
+<span class="fc" id="L31">		suite1.inserer( new Demande(8, Sens.MONTEE));</span>
+<span class="fc" id="L32">		suite1.inserer( new Demande(2, Sens.MONTEE));</span>
+<span class="fc" id="L33">		suite1.inserer( new Demande(8, Sens.DESCENTE));</span>
+<span class="fc" id="L34">		suite1.inserer( new Demande(4, Sens.DESCENTE));</span>
+<span class="fc" id="L35">		assertEquals( suite1.toString(), &quot;[2^,8^,8v,4v]&quot;);</span>
+<span class="fc" id="L36">		assertEquals( suite2.toString(), &quot;[]&quot;);</span>
+<span class="fc" id="L37">	}</span>
+
+	@After
+	public void tearDown() throws Exception {
+<span class="fc" id="L41">		suite1 = null;</span>
+<span class="fc" id="L42">		suite2 = null;</span>
+<span class="fc" id="L43">	}</span>
+
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemandes#ListeTrieeCirculaireDeDemandes()}.
+	 */
+	@Test
+	public void testListeTrieeCirculaireDeDemandesDeDeplacement() {
+<span class="fc" id="L50">		assertTrue( suite2.estVide());</span>
+<span class="fc" id="L51">		assertNotNull( suite1);</span>
+<span class="fc" id="L52">	}</span>
+
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemandes#vider()}.
+	 */
+	@Test
+	public void testVider() {
+<span class="fc" id="L59">		assertFalse( suite1.estVide());</span>
+<span class="fc" id="L60">		suite1.vider();</span>
+<span class="fc" id="L61">		assertTrue( suite1.estVide());</span>
+<span class="fc" id="L62">	}</span>
+
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemandes#estVide()}.
+	 * @throws ExceptionDemandeInvalide 
+	 */
+	@Test
+	public void testEstVide() {
+<span class="fc" id="L70">		assertFalse( suite1.estVide());</span>
+<span class="fc" id="L71">		assertTrue( suite2.estVide());</span>
+<span class="fc" id="L72">		suite2.inserer( new Demande( 1, Sens.DESCENTE));</span>
+<span class="fc" id="L73">		assertFalse( suite2.estVide());</span>
+<span class="fc" id="L74">	}</span>
+	
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemandes#taille()}.
+	 */
+	@Test
+	public void testTaille() {
+<span class="fc" id="L81">		assertSame( 4,suite1.taille());</span>
+<span class="fc" id="L82">		assertSame( 0, suite2.taille());</span>
+<span class="fc" id="L83">	}</span>
+
+
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemandes#inserer(outils.Demande)}.
+	 * Cas normaux.
+	 */
+	@Test
+	public void testInserer1() {
+<span class="fc" id="L92">		suite1.inserer( new Demande(9, Sens.DESCENTE));</span>
+<span class="fc" id="L93">		assertEquals( suite1.toString(), &quot;[2^,8^,9v,8v,4v]&quot;);</span>
+<span class="fc" id="L94">		suite1.inserer( new Demande(1, Sens.DESCENTE));</span>
+<span class="fc" id="L95">		assertEquals( suite1.toString(), &quot;[2^,8^,9v,8v,4v,1v]&quot;);</span>
+<span class="fc" id="L96">		suite1.inserer( new Demande(4, Sens.MONTEE));</span>
+<span class="fc" id="L97">		assertEquals( suite1.toString(), &quot;[2^,4^,8^,9v,8v,4v,1v]&quot;);</span>
+<span class="fc" id="L98">		suite1.inserer( new Demande(3, Sens.DESCENTE));</span>
+<span class="fc" id="L99">		assertEquals( suite1.toString(), &quot;[2^,4^,8^,9v,8v,4v,3v,1v]&quot;);</span>
+<span class="fc" id="L100">		suite1.inserer( new Demande(0, Sens.MONTEE));</span>
+<span class="fc" id="L101">		assertEquals( suite1.toString(), &quot;[0^,2^,4^,8^,9v,8v,4v,3v,1v]&quot;);</span>
+		
+<span class="fc" id="L103">		suite1.inserer( new Demande(8, Sens.DESCENTE));</span>
+<span class="fc" id="L104">		assertEquals( suite1.toString(), &quot;[0^,2^,4^,8^,9v,8v,4v,3v,1v]&quot;);</span>
+<span class="fc" id="L105">		suite1.inserer( new Demande(9, Sens.DESCENTE));</span>
+<span class="fc" id="L106">		assertEquals( suite1.toString(), &quot;[0^,2^,4^,8^,9v,8v,4v,3v,1v]&quot;);</span>
+<span class="fc" id="L107">		suite1.inserer( new Demande(1, Sens.DESCENTE));</span>
+<span class="fc" id="L108">		assertEquals( suite1.toString(), &quot;[0^,2^,4^,8^,9v,8v,4v,3v,1v]&quot;);</span>
+<span class="fc" id="L109">		suite1.inserer( new Demande(0, Sens.MONTEE));</span>
+<span class="fc" id="L110">		assertEquals( suite1.toString(), &quot;[0^,2^,4^,8^,9v,8v,4v,3v,1v]&quot;);</span>
+<span class="fc" id="L111">		suite1.inserer( new Demande(2, Sens.MONTEE));</span>
+<span class="fc" id="L112">		assertEquals( suite1.toString(), &quot;[0^,2^,4^,8^,9v,8v,4v,3v,1v]&quot;);</span>
+<span class="fc" id="L113">		suite1.inserer( new Demande(8, Sens.MONTEE));</span>
+<span class="fc" id="L114">		assertEquals( suite1.toString(), &quot;[0^,2^,4^,8^,9v,8v,4v,3v,1v]&quot;);</span>
+<span class="fc" id="L115">	}</span>
+	
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemande#inserer(outils.Demande)}.
+	 * Cas exceptionnel.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testInserer2() {
+<span class="nc" id="L123">		suite1.inserer( new Demande(4, Sens.INDEFINI));</span>
+<span class="nc" id="L124">	}</span>
+	
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemande#inserer(outils.Demande)}.
+	 * Cas exceptionnel.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testInserer3() {
+<span class="nc" id="L132">		suite1.inserer( new Demande(0, Sens.DESCENTE));</span>
+<span class="nc" id="L133">	}</span>
+
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemande#inserer(outils.Demande)}.
+	 * Cas exceptionnel.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testInserer4() {
+<span class="nc" id="L141">		suite1.inserer( new Demande(9, Sens.MONTEE));</span>
+<span class="nc" id="L142">	}</span>
+
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemande#inserer(outils.Demande)}.
+	 * Cas exceptionnel.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testInserer5() {
+<span class="nc" id="L150">		suite1.inserer( new Demande(-3, Sens.MONTEE));</span>
+<span class="nc" id="L151">	}</span>
+
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemande#inserer(outils.Demande)}.
+	 * Cas exceptionnel.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testInserer6() {
+<span class="nc" id="L159">		suite1.inserer( new Demande(-1, Sens.DESCENTE));</span>
+<span class="nc" id="L160">	}</span>
+
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemande#inserer(outils.Demande)}.
+	 * Cas exceptionnel.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testInserer7() {
+<span class="nc" id="L168">		suite1.inserer( new Demande(-8, Sens.INDEFINI));</span>
+<span class="nc" id="L169">	}</span>
+
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemande#inserer(outils.Demande)}.
+	 * Cas exceptionnel.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testInserer8() {
+<span class="nc" id="L177">		suite1.inserer( new Demande(10, Sens.DESCENTE));</span>
+<span class="nc" id="L178">	}</span>
+	
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemande#inserer(outils.Demande)}.
+	 * Cas exceptionnel.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testInserer9() {
+<span class="nc" id="L186">		suite1.inserer( new Demande(11, Sens.MONTEE));</span>
+<span class="nc" id="L187">	}</span>
+
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemande#inserer(outils.Demande)}.
+	 * Cas exceptionnel.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testInserer10() {
+<span class="nc" id="L195">		suite1.inserer( new Demande(12, Sens.INDEFINI));</span>
+<span class="nc" id="L196">	}</span>
+	
+	/**
+	 * Methode de test {@link commande.ListeTrieeCirculaireDeDemandes#supprimer(outils.Demande)}.
+	 * Cas normaux.
+	 */
+	@Test
+	public void testSupprimer1()  {
+<span class="fc" id="L204">		suite1.supprimer( new Demande(2, Sens.MONTEE));</span>
+<span class="fc" id="L205">		assertEquals( suite1.toString(), &quot;[8^,8v,4v]&quot;);</span>
+<span class="fc" id="L206">		suite1.supprimer( new Demande(8, Sens.DESCENTE));</span>
+<span class="fc" id="L207">		assertEquals( suite1.toString(), &quot;[8^,4v]&quot;);</span>
+<span class="fc" id="L208">		suite1.supprimer( new Demande(8, Sens.MONTEE));</span>
+<span class="fc" id="L209">		assertEquals( suite1.toString(), &quot;[4v]&quot;);</span>
+<span class="fc" id="L210">		suite1.supprimer( new Demande(4, Sens.DESCENTE));</span>
+<span class="fc" id="L211">		assertTrue( suite1.estVide());</span>
+<span class="fc" id="L212">	}</span>
+	
+	/**
+	 * Methode de test {@link commande.ListeTrieeCirculaireDeDemandes#supprimer(outils.Demande)}.
+	 * Cas Exceptionnel.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testSupprimer2() {
+<span class="nc" id="L220">		suite1.supprimer( new Demande(3, Sens.MONTEE));</span>
+<span class="nc" id="L221">	}</span>
+
+	/**
+	 * Methode de test {@link commande.ListeTrieeCirculaireDeDemandes#supprimer(outils.Demande)}.
+	 * Cas Exceptionnel.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testSupprimer3() {
+<span class="nc" id="L229">		suite1.supprimer( new Demande(3, Sens.DESCENTE));</span>
+<span class="nc" id="L230">	}</span>
+
+	/**
+	 * Methode de test {@link commande.ListeTrieeCirculaireDeDemandes#supprimer(outils.Demande)}.
+	 * Cas Exceptionnel.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testSupprimer4() {
+<span class="nc" id="L238">		suite2.supprimer( new Demande(3, Sens.MONTEE));</span>
+<span class="nc" id="L239">	}</span>
+
+	/**
+	 * Methode de test {@link commande.ListeTrieeCirculaireDeDemandes#supprimer(outils.Demande)}.
+	 * Cas Exceptionnel.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void testSupprimer5() {
+<span class="nc" id="L247">		suite1.supprimer( new Demande(8, Sens.INDEFINI));</span>
+<span class="nc" id="L248">	}</span>
+
+	/**
+	 * Methode de test de {@link commande.ListeTrieeCirculaireDeDemandes#suivantDe(outils.Demande)}.
+	 */
+	@Test
+	public void testSuivantDe() {
+<span class="fc" id="L255">		assertNull( suite2.suivantDe(new Demande(3,Sens.MONTEE)));</span>
+		
+<span class="fc" id="L257">		suite2.inserer( new Demande( 3, Sens.MONTEE));</span>
+<span class="fc" id="L258">		assertEquals( suite2.toString(), &quot;[3^]&quot;);</span>
+<span class="fc" id="L259">		assertEquals( new Demande( 3, Sens.MONTEE), </span>
+<span class="fc" id="L260">				suite2.suivantDe(new Demande(1, Sens.MONTEE)));</span>
+<span class="fc" id="L261">		assertEquals( new Demande( 3, Sens.MONTEE), </span>
+<span class="fc" id="L262">				suite2.suivantDe(new Demande( 4, Sens.MONTEE)));</span>
+<span class="fc" id="L263">		assertEquals( new Demande( 3, Sens.MONTEE), </span>
+<span class="fc" id="L264">				suite2.suivantDe(new Demande(1, Sens.DESCENTE)));</span>
+<span class="fc" id="L265">		assertEquals( new Demande( 3, Sens.MONTEE), </span>
+<span class="fc" id="L266">				suite2.suivantDe(new Demande( 4, Sens.DESCENTE)));</span>
+
+<span class="fc" id="L268">		suite2.inserer( new Demande( 0, Sens.MONTEE));</span>
+<span class="fc" id="L269">		assertEquals( suite2.toString(), &quot;[0^,3^]&quot;);</span>
+<span class="fc" id="L270">		assertEquals( new Demande( 3, Sens.MONTEE), </span>
+<span class="fc" id="L271">				suite2.suivantDe(new Demande(1, Sens.MONTEE)));</span>
+<span class="fc" id="L272">		assertEquals( new Demande( 0, Sens.MONTEE), </span>
+<span class="fc" id="L273">				suite2.suivantDe(new Demande( 4, Sens.MONTEE)));</span>
+<span class="fc" id="L274">		assertEquals( new Demande( 0, Sens.MONTEE), </span>
+<span class="fc" id="L275">				suite2.suivantDe(new Demande(1, Sens.DESCENTE)));</span>
+<span class="fc" id="L276">		assertEquals( new Demande( 0, Sens.MONTEE), </span>
+<span class="fc" id="L277">				suite2.suivantDe(new Demande( 4, Sens.DESCENTE)));</span>
+
+<span class="fc" id="L279">		suite2.supprimer( new Demande( 3, Sens.MONTEE));</span>
+<span class="fc" id="L280">		suite2.supprimer( new Demande( 0, Sens.MONTEE));</span>
+<span class="fc" id="L281">		suite2.inserer( new Demande( 2, Sens.DESCENTE));</span>
+<span class="fc" id="L282">		suite2.inserer( new Demande( 4, Sens.DESCENTE));</span>
+<span class="fc" id="L283">		assertEquals( suite2.toString(), &quot;[4v,2v]&quot;);</span>
+<span class="fc" id="L284">		assertEquals( new Demande( 4, Sens.DESCENTE), </span>
+<span class="fc" id="L285">				suite2.suivantDe(new Demande(1, Sens.MONTEE)));</span>
+<span class="fc" id="L286">		assertEquals( new Demande( 4, Sens.DESCENTE), </span>
+<span class="fc" id="L287">				suite2.suivantDe(new Demande( 5, Sens.MONTEE)));</span>
+<span class="fc" id="L288">		assertEquals( new Demande( 2, Sens.DESCENTE), </span>
+<span class="fc" id="L289">				suite2.suivantDe(new Demande(3, Sens.DESCENTE)));</span>
+<span class="fc" id="L290">		assertEquals( new Demande( 4, Sens.DESCENTE), </span>
+<span class="fc" id="L291">				suite2.suivantDe(new Demande( 1, Sens.DESCENTE)));</span>
+		
+<span class="fc" id="L293">		assertEquals( suite1.toString(), &quot;[2^,8^,8v,4v]&quot;);</span>
+<span class="fc" id="L294">		assertEquals( new Demande(2,Sens.MONTEE), </span>
+<span class="fc" id="L295">				suite1.suivantDe(new Demande(0,Sens.MONTEE)));</span>
+<span class="fc" id="L296">		assertEquals( new Demande(2,Sens.MONTEE),</span>
+<span class="fc" id="L297">				suite1.suivantDe(new Demande(2,Sens.MONTEE)));</span>
+<span class="fc" id="L298">		assertEquals( new Demande(8,Sens.MONTEE),</span>
+<span class="fc" id="L299">				suite1.suivantDe(new Demande(3,Sens.MONTEE)));</span>
+<span class="fc" id="L300">		assertEquals( new Demande(8,Sens.MONTEE), </span>
+<span class="fc" id="L301">				suite1.suivantDe(new Demande(7,Sens.MONTEE)));</span>
+<span class="fc" id="L302">		assertEquals( new Demande(8,Sens.MONTEE),</span>
+<span class="fc" id="L303">				suite1.suivantDe(new Demande(8,Sens.MONTEE)));</span>
+<span class="fc" id="L304">		assertEquals( new Demande(4,Sens.DESCENTE),</span>
+<span class="fc" id="L305">				suite1.suivantDe(new Demande(7,Sens.DESCENTE)));</span>
+<span class="fc" id="L306">		assertEquals( new Demande(4,Sens.DESCENTE), </span>
+<span class="fc" id="L307">				suite1.suivantDe(new Demande(4,Sens.DESCENTE)));</span>
+<span class="fc" id="L308">		assertEquals( new Demande(2,Sens.MONTEE),</span>
+<span class="fc" id="L309">				suite1.suivantDe(new Demande(3,Sens.DESCENTE)));</span>
+<span class="fc" id="L310">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>test (22 mars 2016 00:11:19)</div></body></html>

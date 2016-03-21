@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>DemandeTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">test (22 mars 2016 00:11:19)</a> &gt; <a href="../../index.html" class="el_group">tp4</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.source.html" class="el_package">test</a> &gt; <span class="el_source">DemandeTest.java</span></div><h1>DemandeTest.java</h1><pre class="source lang-java linenums">/**
+ * Classes de test des classes du projet ascenseur.
+ * @author Lucile Torres-Gerardin
+ */
+package test;
+
+import static org.junit.Assert.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import outils.Demande;
+import outils.ExceptionCabineArretee;
+import outils.Sens;
+
+/**
+ * Classe de test unitaire de la classe {@link outils.Demande}.
+ */
+<span class="fc" id="L20">public class DemandeTest {</span>
+	
+	private Demande d1, d2, d3, d4;
+
+	
+	@Before
+	public void setUp()  {
+<span class="fc" id="L27">		d1 = new Demande();</span>
+<span class="fc" id="L28">		d2 = new Demande(4, Sens.MONTEE);</span>
+<span class="fc" id="L29">		d3 = new Demande(3, Sens.DESCENTE);</span>
+<span class="fc" id="L30">		d4 = new Demande(1, Sens.INDEFINI);</span>
+<span class="fc" id="L31">	}</span>
+
+	@After
+	public void tearDown() {
+<span class="fc" id="L35">		d1 = d2 = d3 = d4 = null;</span>
+<span class="fc" id="L36">	}</span>
+
+	/**
+	 * Methode de test de {@link outils.Demande#Demande()}.
+	 */
+	@Test
+	public void testDemande1() {
+<span class="fc" id="L43">		assertSame( 0, d1.etage());</span>
+<span class="fc" id="L44">		assertTrue( d1.estIndefini());</span>
+<span class="fc" id="L45">	}</span>
+	
+	/**
+	 * Methode de test de {@link outils.Demande#Demande(int, outils.Sens)}.
+	 */
+	@Test
+	public void testDemandeIntSens1() {
+<span class="fc" id="L52">		assertSame( 4, d2.etage());</span>
+<span class="fc" id="L53">		assertTrue( d2.enMontee());</span>
+<span class="fc" id="L54">		assertSame( 3, d3.etage());</span>
+<span class="fc" id="L55">		assertTrue( d3.enDescente());</span>
+<span class="fc" id="L56">		assertSame( 1, d4.etage());</span>
+<span class="fc" id="L57">		assertTrue( d4.estIndefini());</span>
+<span class="fc" id="L58">	}</span>
+	
+	/**
+	 * Methode de test de {@link outils.Demande#etage()}.
+	 */
+	@Test
+	public void testEtage() {
+<span class="fc" id="L65">		assertSame( 3, d3.etage());</span>
+<span class="fc" id="L66">	}</span>
+
+	/**
+	 * Methode de test de {@link outils.Demande#passeEtageSuivant()}.
+	 * Cas normaux.
+	 */
+	@Test
+	public void testPasseEtageSuivant1() throws ExceptionCabineArretee {
+<span class="fc" id="L74">		d2.passeEtageSuivant();</span>
+<span class="fc" id="L75">		assertSame( 5, d2.etage());</span>
+<span class="fc" id="L76">		d3.passeEtageSuivant();</span>
+<span class="fc" id="L77">		assertSame( 2, d3.etage());</span>
+<span class="fc" id="L78">	}</span>
+	
+	/**
+	 * Methode de test de {@link outils.Demande#passeEtageSuivant()}.
+	 * Cas exceptionnel.
+	 */
+	@Test(expected=ExceptionCabineArretee.class)
+	public void testPasseEtageSuivant2() throws ExceptionCabineArretee {
+<span class="nc" id="L86">		d4.passeEtageSuivant();</span>
+<span class="nc" id="L87">	}</span>
+
+	/**
+	 * Methode obsolete de test de la mehode obsolete {@link outils.Demande#sens()}.
+	 * 
+	 * @deprecated remplacee par {@link #testEnMontee()}, {@link #testEnDEscente()} et
+	 * {@link #testEstIndefini()}
+	 */
+	@Test @Deprecated
+	public void testSens() {
+<span class="fc" id="L97">		assertEquals( Sens.MONTEE, d2.sens());</span>
+<span class="fc" id="L98">		assertEquals( Sens.DESCENTE, d3.sens());</span>
+<span class="fc" id="L99">		assertEquals( Sens.INDEFINI, d4.sens());</span>
+<span class="fc" id="L100">	}</span>
+	
+	/**
+	 * Methode de test de {@link outils.Demande#enMontee()}.
+	 */
+	@Test
+	public void testEnMontee() {
+<span class="fc" id="L107">		assertTrue( d2.enMontee());</span>
+<span class="fc" id="L108">		assertFalse( d3.enMontee());</span>
+<span class="fc" id="L109">		assertFalse( d4.enMontee());</span>
+<span class="fc" id="L110">	}</span>
+
+	/**
+	 * Methode de test de {@link outils.Demande#enDescente()}.
+	 */
+	@Test
+	public void testEnDescente() {
+<span class="fc" id="L117">		assertTrue( d3.enDescente());</span>
+<span class="fc" id="L118">		assertFalse( d2.enDescente());</span>
+<span class="fc" id="L119">		assertFalse( d4.enDescente());</span>
+<span class="fc" id="L120">	}</span>
+
+	/**
+	 * Methode de test de {@link outils.Demande#estIndefini()}.
+	 */
+	@Test
+	public void testEstIndefini() {
+<span class="fc" id="L127">		assertTrue( d4.estIndefini());</span>
+<span class="fc" id="L128">		assertFalse( d2.estIndefini());</span>
+<span class="fc" id="L129">		assertFalse( d3.estIndefini());</span>
+<span class="fc" id="L130">	}</span>
+
+	/**
+	 * Methode de test de {@link outils.Demande#changeSens(outils.Sens)}.
+	 */
+	@Test
+	public void testChangeSens() {
+<span class="fc" id="L137">		d3.changeSens(Sens.DESCENTE);</span>
+<span class="fc" id="L138">		assertTrue( d3.enDescente());</span>
+<span class="fc" id="L139">		d3.changeSens(Sens.MONTEE);</span>
+<span class="fc" id="L140">		assertTrue( d3.enMontee());</span>
+<span class="fc" id="L141">		d3.changeSens(Sens.INDEFINI);</span>
+<span class="fc" id="L142">		assertTrue( d3.estIndefini());</span>
+<span class="fc" id="L143">	}</span>
+	/**
+	 * Methode de test de {@link outils.Demande#toString()}.
+	 */
+	@Test
+	public void testToString() {
+<span class="fc" id="L149">		assertEquals( d2.toString(), &quot;4^&quot;);</span>
+<span class="fc" id="L150">		assertEquals( d3.toString(), &quot;3v&quot;);</span>
+<span class="fc" id="L151">		assertEquals( d4.toString(), &quot;1-&quot;);</span>
+<span class="fc" id="L152">	}</span>
+
+	/**
+	 * Methode de test de {@link outils.Demande#equals(java.lang.Object)}.
+	 */
+	@Test
+	public void testEqualsObject() {
+<span class="fc" id="L159">		assertFalse( d2.equals( null));</span>
+<span class="fc" id="L160">		assertFalse( d2.equals( new Integer(4)));</span>
+<span class="fc" id="L161">		assertTrue( d2.equals( new Demande(4, Sens.MONTEE)));</span>
+<span class="fc" id="L162">		assertFalse( d2.equals( new Demande(4, Sens.INDEFINI)));</span>
+<span class="fc" id="L163">		assertFalse( d2.equals( new Demande(4, Sens.DESCENTE)));</span>
+<span class="fc" id="L164">		assertFalse( d2.equals( new Demande(3, Sens.MONTEE)));</span>
+<span class="fc" id="L165">		assertTrue( d1.equals( new Demande(0, Sens.INDEFINI)));</span>
+<span class="fc" id="L166">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.2.201409121644</span>test (22 mars 2016 00:11:19)</div></body></html>
