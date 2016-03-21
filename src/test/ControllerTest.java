@@ -45,34 +45,34 @@ public class ControllerTest {
 
 	private void monter1_1() {
 		Demande d;
-		dc = new Controller(cabine,iug, 7, 3, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 3, Sens.INDEFINI);
 		d = new Demande(1, Sens.MONTEE);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
 
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.DESCENDRE.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.DESCENDRE.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
 
 	private void etageMoins1_1_1() {
 		Demande d;
-		dc = new Controller(cabine,iug,7, 2, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 2, Sens.INDEFINI);
 		d = new Demande(1, Sens.MONTEE);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.ARRET_PROCHAIN.toString();
-		message += Message.DESCENDRE.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + Message.DESCENDRE.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
 
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
@@ -81,18 +81,18 @@ public class ControllerTest {
 
 	private void descendre1_2() {
 		Demande d;
-		dc = new Controller(cabine,iug,7, 3, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 3, Sens.INDEFINI);
 		d = new Demande(1, Sens.DESCENTE);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
 
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.DESCENDRE.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.DESCENDRE.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 
@@ -106,33 +106,33 @@ public class ControllerTest {
 
 	private void monter2_1() {
 		Demande d;
-		dc = new Controller(cabine,iug,7, 3, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 3, Sens.INDEFINI);
 		d = new Demande(5, Sens.MONTEE);
 		dc.demander(d);
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
 
 	private void etagePlusUn2_1_1() {
 		Demande d;
-		dc = new Controller(cabine,iug,7, 3, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 3, Sens.INDEFINI);
 		d = new Demande(4, Sens.MONTEE);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
 
-		message += Message.ARRET_PROCHAIN.toString();
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
 
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
@@ -145,11 +145,11 @@ public class ControllerTest {
 
 	private void monter3_1() {
 		Demande d;
-		dc = new Controller(cabine,iug,7, 3, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 3, Sens.INDEFINI);
 		d = new Demande(3, Sens.MONTEE);
 		dc.demander(d);
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 
@@ -157,11 +157,11 @@ public class ControllerTest {
 
 	private void descendre3_2() {
 		Demande d;
-		dc = new Controller(cabine,iug,7, 3, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 3, Sens.INDEFINI);
 		d = new Demande(3, Sens.DESCENTE);
 		dc.demander(d);
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
@@ -173,20 +173,20 @@ public class ControllerTest {
 
 	private void directionOppose4_1() {
 		Demande d;
-		dc = new Controller(cabine,iug,7, 1, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 1, Sens.INDEFINI);
 		d = new Demande(3, Sens.MONTEE);
 		dc.signalerChangementDEtage();
 		dc.arretDUrgence();
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
-		String message = String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		String message = "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 
@@ -200,7 +200,7 @@ public class ControllerTest {
 
 	private void monte5_1() {
 		Demande d;
-		dc = new Controller(cabine,iug,7, 1, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 1, Sens.INDEFINI);
 		d = new Demande(5, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
@@ -208,18 +208,18 @@ public class ControllerTest {
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += String.format(Message.ALLUMER_BOUTON.toString(), new Demande(4, Sens.MONTEE).toString());
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), new Demande(4, Sens.MONTEE).toString());
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), new Demande(4, Sens.MONTEE).toString());
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), new Demande(4, Sens.MONTEE).toString());
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
 
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 
@@ -227,7 +227,7 @@ public class ControllerTest {
 
 	private void descend5_2() {
 		Demande d;
-		dc = new Controller(cabine,iug,7, 7, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 7, Sens.INDEFINI);
 		d = new Demande(1, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
@@ -237,19 +237,19 @@ public class ControllerTest {
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.DESCENDRE.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
-		message += String.format(Message.ALLUMER_BOUTON.toString(), new Demande(4, Sens.DESCENTE).toString());
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), new Demande(4, Sens.DESCENTE).toString());
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.DESCENDRE.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), new Demande(4, Sens.DESCENTE).toString());
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), new Demande(4, Sens.DESCENTE).toString());
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 
@@ -264,31 +264,36 @@ public class ControllerTest {
 		Demande d;
 		Demande d2 = new Demande(4, Sens.MONTEE);
 		Demande d3 = new Demande(3, Sens.DESCENTE);
-		dc = new Controller(cabine,iug,7, 1, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 1, Sens.INDEFINI);
 		d = new Demande(7, Sens.INDEFINI);
+		
 		dc.demander(d);
+		
 		dc.signalerChangementDEtage();
+		
 		dc.demander(d2);
 		dc.demander(d3);
+		
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d2);
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d3);
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "7");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d2);
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d3);
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "7");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d);
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
@@ -303,7 +308,7 @@ public class ControllerTest {
 	private void sansChangementSens7_1() {
 		Demande d;
 		Demande d2 = new Demande(4, Sens.MONTEE);
-		dc = new Controller(cabine,iug,7, 7, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 7, Sens.INDEFINI);
 		d = new Demande(1, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
@@ -313,19 +318,19 @@ public class ControllerTest {
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.DESCENDRE.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d2);
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.DESCENDRE.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d2);
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d);
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
@@ -333,7 +338,7 @@ public class ControllerTest {
 	private void avecChangementSens7_2() {
 		Demande d;
 		Demande d2 = new Demande(7, Sens.MONTEE);
-		dc = new Controller(cabine,iug,7, 7, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 7, Sens.INDEFINI);
 		d = new Demande(4, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
@@ -343,20 +348,20 @@ public class ControllerTest {
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.DESCENDRE.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "7");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.DESCENDRE.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "7");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d2);
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 
@@ -368,7 +373,7 @@ public class ControllerTest {
 		Demande d2 = new Demande(7, Sens.MONTEE);
 		Demande d3 = new Demande(2, Sens.DESCENTE);
 		Demande d4 = new Demande(1, Sens.INDEFINI);
-		dc = new Controller(cabine,iug,7, 7, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 7, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
@@ -385,34 +390,34 @@ public class ControllerTest {
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.DESCENDRE.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
-		message += Message.DESCENDRE.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d3);
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d4.toString());
-		message += Message.DESCENDRE.toString();
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d4.toString());
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "7");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2.toString());
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.DESCENDRE.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
+		message += "\n" + Message.DESCENDRE.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d3);
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d4.toString());
+		message += "\n" + Message.DESCENDRE.toString();
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d4.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "7");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d2.toString());
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
@@ -426,7 +431,7 @@ public class ControllerTest {
 		Demande d = new Demande(5, Sens.INDEFINI);
 		Demande d2 = new Demande(4, Sens.MONTEE);
 		Demande d3 = new Demande(4, Sens.DESCENTE);
-		dc = new Controller(cabine,iug,7, 1, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 1, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.demander(d2);
@@ -435,22 +440,22 @@ public class ControllerTest {
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.DESCENDRE.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2.toString());
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
-		message += Message.DESCENDRE.toString();
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.DESCENDRE.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d2.toString());
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += "\n" + Message.DESCENDRE.toString();
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d);
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
@@ -465,21 +470,21 @@ public class ControllerTest {
 	private void memeSens9_1() {
 		Demande d = new Demande(3, Sens.INDEFINI);
 		Demande d2 = new Demande(3, Sens.MONTEE);
-		dc = new Controller(cabine,iug,7, 0, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 0, Sens.INDEFINI);
 		dc.demander(d);
 		dc.demander(d2);
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d2);
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
@@ -488,7 +493,7 @@ public class ControllerTest {
 		Demande d = new Demande(3, Sens.INDEFINI);
 		Demande d2 = new Demande(3, Sens.DESCENTE);
 		Demande d3 = new Demande(4, Sens.INDEFINI);
-		dc = new Controller(cabine,iug,7, 0, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 0, Sens.INDEFINI);
 		dc.demander(d);
 		dc.demander(d2);
 		dc.demander(d3);
@@ -497,22 +502,22 @@ public class ControllerTest {
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d3);
-		message += Message.DESCENDRE.toString();
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d3);
+		message += "\n" + Message.DESCENDRE.toString();
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d2);
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
@@ -528,19 +533,19 @@ public class ControllerTest {
 	private void appelExInt10_1() {
 		Demande d = new Demande(3, Sens.INDEFINI);
 		Demande d2 = new Demande(3, Sens.DESCENTE);
-		dc = new Controller(cabine,iug,7, 1, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 1, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.demander(d2);
 		dc.signalerChangementDEtage();
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d2);
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
@@ -548,17 +553,17 @@ public class ControllerTest {
 	private void appelInterieur10_2() {
 		Demande d = new Demande(3, Sens.INDEFINI);
 		Demande d2 = new Demande(3, Sens.INDEFINI);
-		dc = new Controller(cabine,iug,7, 1, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 1, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.demander(d2);
 		dc.signalerChangementDEtage();
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d2);
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 
@@ -567,17 +572,17 @@ public class ControllerTest {
 	private void appelExtMemeDirection10_3() {
 		Demande d = new Demande(3, Sens.MONTEE);
 		Demande d2 = new Demande(3, Sens.MONTEE);
-		dc = new Controller(cabine,iug,7, 1, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 1, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.demander(d2);
 		dc.signalerChangementDEtage();
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d2);
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
@@ -585,18 +590,18 @@ public class ControllerTest {
 	private void appelExtDifDirection10_4() {
 		Demande d = new Demande(3, Sens.MONTEE);
 		Demande d2 = new Demande(3, Sens.DESCENTE);
-		dc = new Controller(cabine,iug,7, 1, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 1, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.demander(d2);
 		dc.signalerChangementDEtage();
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message = String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d);
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
@@ -606,21 +611,21 @@ public class ControllerTest {
 		Demande d = new Demande(3, Sens.INDEFINI);
 		Demande d2 = new Demande(3, Sens.DESCENTE);
 		Demande d3 = new Demande(4, Sens.INDEFINI);
-		dc = new Controller(cabine,iug,7, 0, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 0, Sens.INDEFINI);
 		dc.demander(d);
 		dc.demander(d2);
 		dc.demander(d3);
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d3);
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d3);
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
@@ -630,38 +635,38 @@ public class ControllerTest {
 		Demande d = new Demande(3, Sens.INDEFINI);
 		Demande d2 = new Demande(3, Sens.DESCENTE);
 		Demande d3 = new Demande(4, Sens.INDEFINI);
-		dc = new Controller(cabine,iug,7, 0, Sens.INDEFINI);
+		dc = new Controller(cabine,iug,8, 0, Sens.INDEFINI);
 		dc.demander(d);
 		dc.demander(d2);
 		dc.demander(d3);
-		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
-		message += Message.MONTER.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d3);
+		String message = "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d3);
 
 		d = new Demande(3, Sens.MONTEE);
 		d2 = new Demande(3, Sens.DESCENTE);
 		d3 = new Demande(4, Sens.INDEFINI);
-		// dc = new Controller(cabine,iug,7, 3, Sens.INDEFINI);
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
-		message += String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
-		message += Message.MONTER.toString();
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d3);
-		message += Message.DESCENDRE.toString();
-		message += Message.ARRET_PROCHAIN.toString();
-		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
-		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		// dc = new Controller(cabine,iug,8, 3, Sens.INDEFINI);
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += "\n" + String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
+		message += "\n" + Message.MONTER.toString();
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d3);
+		message += "\n" + Message.DESCENDRE.toString();
+		message += "\n" + Message.ARRET_PROCHAIN.toString();
+		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.toString(), d);
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 

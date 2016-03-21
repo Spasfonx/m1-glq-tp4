@@ -13,7 +13,7 @@ public class Logger {
 	 * @param message le message a ajouter
 	 */
 	public static void writeLog(String message){
-		log+=message;
+		log+="\n"+message;
 	}
 	
 	

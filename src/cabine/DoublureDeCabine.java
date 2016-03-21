@@ -1,5 +1,8 @@
 package cabine;
 
+import outils.Logger;
+import outils.Message;
+
 public class DoublureDeCabine implements ICabine {
 
 	public void signalerChangementDEtage() {
@@ -8,12 +11,12 @@ public class DoublureDeCabine implements ICabine {
 	}
 
 	public void monter() {
-		// TODO Auto-generated method stub
+		Logger.writeLog(Message.MONTER.toString());
 		
 	}
 
 	public void descendre() {
-		// TODO Auto-generated method stub
+		Logger.writeLog(Message.DESCENDRE.toString());
 		
 	}
 
