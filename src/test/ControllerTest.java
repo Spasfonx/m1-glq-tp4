@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+
+import controller.Controller;
 import controller.DoublureController;
 import controller.IController;
 import outils.Demande;
@@ -21,125 +23,116 @@ public class ControllerTest {
 
 	@Before
 	public void setUp() {
-		dc = new DoublureController();
 
 	}
 
 	@Test
 	public void testAppelPlusHautUtilisateur() {
 		// 1.1 Monter
+		monter1_1();
+		etageMoins1_1_1();
+		descendre1_2();
+
+	}
+
+	private void monter1_1() {
 		Demande d;
 		dc = new DoublureController(7, 3, Sens.INDEFINI, Sens.INDEFINI);
 		d = new Demande(1, Sens.MONTEE);
 		dc.demander(d);
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(Message.DESCENDRE.toString(), d.toString(), Logger.getLast());
 		dc.signalerChangementDEtage();
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), dc.getPosition()),
-				Logger.getBeforeLast(1));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
 		dc.signalerChangementDEtage();
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), dc.getPosition()),
-				Logger.getBeforeLast(1));
-		assertEquals(String.format(Message.ETEINDRE_BOUTON.toString(), d.toString()), Logger.getLast());
 
-		// 1.1.1 étage -1
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.DESCENDRE.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+	}
+
+	private void etageMoins1_1_1() {
+		Demande d;
 		dc = new DoublureController(7, 2, Sens.INDEFINI, Sens.INDEFINI);
 		d = new Demande(1, Sens.MONTEE);
 		dc.demander(d);
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(2));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getBeforeLast(1));
-		assertEquals(Message.DESCENDRE.toString(), d.toString(), Logger.getLast());
 		dc.signalerChangementDEtage();
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), dc.getPosition()),
-				Logger.getBeforeLast(1));
-		assertEquals(String.format(Message.ETEINDRE_BOUTON.toString(), d.toString()), Logger.getLast());
 
-		// 1.2 Descendre
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.ARRET_PROCHAIN.toString();
+		message += Message.DESCENDRE.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+
+	}
+
+	private void descendre1_2() {
+		Demande d;
 		dc = new DoublureController(7, 3, Sens.INDEFINI, Sens.INDEFINI);
 		d = new Demande(1, Sens.DESCENTE);
 		dc.demander(d);
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(Message.DESCENDRE.toString(), d.toString(), Logger.getLast());
 		dc.signalerChangementDEtage();
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), dc.getPosition()),
-				Logger.getBeforeLast(1));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
 		dc.signalerChangementDEtage();
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), dc.getPosition()),
-				Logger.getBeforeLast(1));
-		assertEquals(String.format(Message.ETEINDRE_BOUTON.toString(), d.toString()), Logger.getLast());
 
-		// 1.2.1 étage -1
-		dc = new DoublureController(7, 2, Sens.INDEFINI, Sens.INDEFINI);
-		d = new Demande(1, Sens.DESCENTE);
-		dc.demander(d);
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(2));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getBeforeLast(1));
-		assertEquals(Message.DESCENDRE.toString(), d.toString(), Logger.getLast());
-		dc.signalerChangementDEtage();
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), dc.getPosition()),
-				Logger.getBeforeLast(1));
-		assertEquals(String.format(Message.ETEINDRE_BOUTON.toString(), d.toString()), Logger.getLast());
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.DESCENDRE.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+
 	}
 
 	@Test
-	public void testAppelPlusBasUtilisateur() {
-		// 2.1 Monter
+	public void testAppelPlusBas() {
+		monter2_1();
+		etagePlusUn2_1_1();
+	}
+
+	private void monter2_1() {
 		Demande d;
 		dc = new DoublureController(7, 3, Sens.INDEFINI, Sens.INDEFINI);
 		d = new Demande(5, Sens.MONTEE);
 		dc.demander(d);
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(Message.MONTER.toString(), d.toString(), Logger.getLast());
-		dc.signalerChangementDEtage();
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), dc.getPosition()),
-				Logger.getBeforeLast(1));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-		dc.signalerChangementDEtage();
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), dc.getPosition()),
-				Logger.getBeforeLast(1));
-		assertEquals(String.format(Message.ETEINDRE_BOUTON.toString(), d.toString()), Logger.getLast());
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+	}
 
-		// 2.1.1 étage +1
+	private void etagePlusUn2_1_1() {
+		Demande d;
 		dc = new DoublureController(7, 3, Sens.INDEFINI, Sens.INDEFINI);
 		d = new Demande(4, Sens.MONTEE);
 		dc.demander(d);
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(2));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getBeforeLast(1));
-		assertEquals(Message.MONTER.toString(), d.toString(), Logger.getLast());
 		dc.signalerChangementDEtage();
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), dc.getPosition()),
-				Logger.getBeforeLast(1));
-		assertEquals(String.format(Message.ETEINDRE_BOUTON.toString(), d.toString()), Logger.getLast());
 
-		// 2.2 Descendre
-		dc = new DoublureController(7, 3, Sens.INDEFINI, Sens.INDEFINI);
-		d = new Demande(5, Sens.DESCENTE);
-		dc.demander(d);
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(Message.MONTER.toString(), d.toString(), Logger.getLast());
-		dc.signalerChangementDEtage();
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), dc.getPosition()),
-				Logger.getBeforeLast(1));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-		dc.signalerChangementDEtage();
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), dc.getPosition()),
-				Logger.getBeforeLast(1));
-		assertEquals(String.format(Message.ETEINDRE_BOUTON.toString(), d.toString()), Logger.getLast());
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
 
-		// 2.2.1 étage +1
-		dc = new DoublureController(7, 3, Sens.INDEFINI, Sens.INDEFINI);
-		d = new Demande(4, Sens.DESCENTE);
-		dc.demander(d);
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(2));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getBeforeLast(1));
-		assertEquals(Message.MONTER.toString(), d.toString(), Logger.getLast());
-		dc.signalerChangementDEtage();
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), dc.getPosition()),
-				Logger.getBeforeLast(1));
-		assertEquals(String.format(Message.ETEINDRE_BOUTON.toString(), d.toString()), Logger.getLast());
+		message += Message.ARRET_PROCHAIN.toString();
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
 
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+	}
+
+	@Test
+	public void testAppelMemePalier() {
+		monter3_1();
+		descendre3_2();
 	}
 
 	private void monter3_1() {
@@ -147,8 +140,10 @@ public class ControllerTest {
 		dc = new DoublureController(7, 3, Sens.INDEFINI, Sens.INDEFINI);
 		d = new Demande(3, Sens.MONTEE);
 		dc.demander(d);
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(String.format(Message.ETEINDRE_BOUTON.toString(), d.toString()), Logger.getLast());
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
 
 	}
 
@@ -157,393 +152,515 @@ public class ControllerTest {
 		dc = new DoublureController(7, 3, Sens.INDEFINI, Sens.INDEFINI);
 		d = new Demande(3, Sens.DESCENTE);
 		dc.demander(d);
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(String.format(Message.ETEINDRE_BOUTON.toString(), d.toString()), Logger.getLast());
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
 	}
 
 	@Test
-	public void testAppelAscenseurMemePalierUtilisateur() {
-
-		monter3_1();
-
-		descendre3_2();
+	public void testAppelApresArretProlonger() {
+		directionOppose4_1();
 	}
 
-	private void monter4_1() {
+	private void directionOppose4_1() {
 		Demande d;
 		dc = new DoublureController(7, 1, Sens.INDEFINI, Sens.INDEFINI);
-		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 2), Logger.getBeforeLast(0));
-
-		dc.arretDUrgence();
 		d = new Demande(3, Sens.MONTEE);
-		dc.demander(d);
-
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(Message.MONTER.toString(), d.toString(), Logger.getLast());
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 3), Logger.getBeforeLast(1));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-
-		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 4), Logger.getBeforeLast(1));
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d.toString(), Logger.getLast());
-	}
-
-	private void descente4_2() {
-		Demande d;
-		dc = new DoublureController(7, 1, Sens.INDEFINI, Sens.INDEFINI);
-		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 2), Logger.getBeforeLast(0));
-
 		dc.arretDUrgence();
-
-		d = new Demande(0, Sens.MONTEE);
 		dc.demander(d);
-
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(Message.DESCENDRE.toString(), d.toString(), Logger.getLast());
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 3), Logger.getBeforeLast(1));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-
 		dc.signalerChangementDEtage();
+		String message = String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
 
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 4), Logger.getBeforeLast(1));
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d.toString(), Logger.getLast());
 	}
 
 	@Test
-	public void testAppelAscenseurApresArretUrgence() {
-		monter4_1();
-
-		descente4_2();
+	public void testAppelDeMemeSensCabine() {
+		monte5_1();
+		descend5_2();
 	}
 
 	private void monte5_1() {
 		Demande d;
-		Demande d2;
-
 		dc = new DoublureController(7, 1, Sens.INDEFINI, Sens.INDEFINI);
 		d = new Demande(5, Sens.INDEFINI);
 		dc.demander(d);
-
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(Message.MONTER.toString(), d.toString(), Logger.getLast());
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 2), Logger.getBeforeLast(0));
-
-		d2 = new Demande(4, Sens.MONTEE);
-		dc.demander(d2);
-
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d2.toString()), Logger.getLast());
-
+		dc.demander(new Demande(4, Sens.MONTEE));
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 3), Logger.getBeforeLast(1));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 4), Logger.getBeforeLast(2));
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d2.toString(), Logger.getBeforeLast(1));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-
 		dc.signalerChangementDEtage();
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += String.format(Message.ALLUMER_BOUTON.toString(), new Demande(4, Sens.MONTEE).toString());
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), new Demande(4, Sens.MONTEE).toString());
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
 
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 5), Logger.getBeforeLast(1));
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d2.toString(), Logger.getLast());
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
 
 	}
 
 	private void descend5_2() {
 		Demande d;
-		Demande d2;
-
 		dc = new DoublureController(7, 7, Sens.INDEFINI, Sens.INDEFINI);
 		d = new Demande(1, Sens.INDEFINI);
 		dc.demander(d);
-
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(Message.DESCENDRE.toString(), d.toString(), Logger.getLast());
-
-		// Cabine en 6
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 6), Logger.getBeforeLast(0));
-
-		d2 = new Demande(4, Sens.DESCENTE);
-		dc.demander(d2);
-
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d2.toString()), Logger.getLast());
-		// Cabine en 5
+		dc.demander(new Demande(4, Sens.DESCENTE));
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 5), Logger.getBeforeLast(1));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-
-		// Cabine en 4
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 4), Logger.getBeforeLast(1));
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d2.toString(), Logger.getLast());
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 3), Logger.getBeforeLast(0));
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 2), Logger.getBeforeLast(1));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 1), Logger.getBeforeLast(1));
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d2.toString(), Logger.getLast());
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.DESCENDRE.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
+		message += String.format(Message.ALLUMER_BOUTON.toString(), new Demande(4, Sens.DESCENTE).toString());
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), new Demande(4, Sens.DESCENTE).toString());
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d.toString());
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
 
 	}
 
 	@Test
-	public void testAppelAscenseurMemeSens(){
-		monte5_1();
-		
-		descend5_2();
+	public void testAppelSensInverse() {
+		monte6_1();
 	}
+
 	private void monte6_1() {
 		Demande d;
-		Demande d2;
-		Demande d3;
-
+		Demande d2 = new Demande(4, Sens.MONTEE);
+		Demande d3 = new Demande(3, Sens.DESCENTE);
 		dc = new DoublureController(7, 1, Sens.INDEFINI, Sens.INDEFINI);
 		d = new Demande(7, Sens.INDEFINI);
 		dc.demander(d);
-
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(Message.MONTER.toString(), d.toString(), Logger.getLast());
-
-		// Cabine en 2
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 2), Logger.getBeforeLast(0));
-
-		d2 = new Demande(4, Sens.MONTEE);
-		d3 = new Demande(3, Sens.DESCENTE);
 		dc.demander(d2);
 		dc.demander(d3);
-
-		// Cabine en 3
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 3), Logger.getBeforeLast(1));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-
-		// Cabine en 4
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 4), Logger.getBeforeLast(0));
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d2.toString(), Logger.getLast());
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 5), Logger.getBeforeLast(0));
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 6), Logger.getBeforeLast(0));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 7), Logger.getBeforeLast(0));
-
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d.toString(), Logger.getLast());
-
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d2);
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d3);
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "7");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
 	}
 
 	@Test
-	public void testAppelAscenseurSensInverseCabine(){
-		monte6_1();
+	public void appelAscenseurChangementSens() {
+		sansChangementSens7_1();
+		avecChangementSens7_2();
+		avec2ChangementSens7_3();
 	}
-	
+
 	private void sansChangementSens7_1() {
 		Demande d;
-		Demande d2;
-
-		int i = 7;
+		Demande d2 = new Demande(4, Sens.MONTEE);
 		dc = new DoublureController(7, 7, Sens.INDEFINI, Sens.INDEFINI);
 		d = new Demande(1, Sens.INDEFINI);
 		dc.demander(d);
-
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(Message.DESCENDRE.toString(), d.toString(), Logger.getLast());
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(0));
-
-		d2 = new Demande(4, Sens.DESCENTE);
 		dc.demander(d2);
-
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d2.toString()), Logger.getBeforeLast(0));
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(1));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(1));
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d2.toString(), Logger.getLast());
-		
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(0));
-		
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(0));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-		
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(1));
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d.toString(), Logger.getLast());
-		
-		
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.DESCENDRE.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d2);
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
 	}
-	
-	private void avecChangementSens7_2(){
-		Demande d;
-		Demande d2;
 
-		int i = 7;
+	private void avecChangementSens7_2() {
+		Demande d;
+		Demande d2 = new Demande(7, Sens.MONTEE);
 		dc = new DoublureController(7, 7, Sens.INDEFINI, Sens.INDEFINI);
 		d = new Demande(4, Sens.INDEFINI);
 		dc.demander(d);
-		
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(Message.DESCENDRE.toString(), d.toString(), Logger.getLast());
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(0));
-
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(0));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-		
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(1));
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d.toString(), Logger.getLast());
-		
-		d2 = new Demande(7, Sens.INDEFINI);
 		dc.demander(d2);
-		
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d2.toString()), Logger.getBeforeLast(1));
-		assertEquals(Message.MONTER.toString(), d.toString(), Logger.getLast());
-		
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i++), Logger.getBeforeLast(0));
-		
 		dc.signalerChangementDEtage();
+		dc.signalerChangementDEtage();
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.DESCENDRE.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "7");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
 
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i++), Logger.getBeforeLast(2));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getBeforeLast(1));
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d2.toString(), Logger.getLast());
-		
-		
 	}
-	
-	private void avec2ChangementSens7_3(){
-		Demande d;
-		Demande d2;
 
-		int i = 7;
+	private void avec2ChangementSens7_3() {
+		Demande d = new Demande(4, Sens.INDEFINI);
+		;
+		Demande d2 = new Demande(7, Sens.MONTEE);
+		Demande d3 = new Demande(2, Sens.DESCENTE);
+		Demande d4 = new Demande(1, Sens.INDEFINI);
 		dc = new DoublureController(7, 7, Sens.INDEFINI, Sens.INDEFINI);
-		d = new Demande(4, Sens.INDEFINI);
 		dc.demander(d);
-		
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(Message.DESCENDRE.toString(), d.toString(), Logger.getLast());
-		
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(0));
-		
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(0));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-		
 		dc.signalerChangementDEtage();
+		dc.demander(d2);
+		dc.demander(d3);
+		dc.signalerChangementDEtage();
+		dc.signalerChangementDEtage();
+		dc.demander(d4);
+		dc.signalerChangementDEtage();
+		dc.signalerChangementDEtage();
+		dc.signalerChangementDEtage();
+		dc.signalerChangementDEtage();
+		dc.signalerChangementDEtage();
+		dc.signalerChangementDEtage();
+		dc.signalerChangementDEtage();
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.DESCENDRE.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
+		message += Message.DESCENDRE.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d3);
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d4.toString());
+		message += Message.DESCENDRE.toString();
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d4.toString());
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "6");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "7");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2.toString());
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+	}
 
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(1));
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d.toString(), Logger.getLast());
-	
-		d = new Demande(7, Sens.INDEFINI);
+	@Test
+	public void deuxAppelMemePalier() {
+		ascenseurMonte8_1();
+	}
+
+	private void ascenseurMonte8_1() {
+		Demande d = new Demande(5, Sens.INDEFINI);
+		Demande d2 = new Demande(4, Sens.MONTEE);
+		Demande d3 = new Demande(4, Sens.DESCENTE);
+		dc = new DoublureController(7, 1, Sens.INDEFINI, Sens.INDEFINI);
 		dc.demander(d);
-		
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(1));
-		assertEquals(Message.MONTER.toString(), d.toString(), Logger.getLast());
-		
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i++), Logger.getBeforeLast(0));
-		
-		d2=new Demande(2,Sens.MONTEE);
-		
-		assertEquals(String.format(Message.ALLUMER_BOUTON.toString(), d.toString()), Logger.getBeforeLast(0));
-		
+		dc.demander(d2);
+		dc.demander(d3);
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i++), Logger.getBeforeLast(0));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-		
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i++), Logger.getBeforeLast(0));
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d.toString(), Logger.getLast());
-		assertEquals(Message.DESCENDRE.toString(), d.toString(), Logger.getLast());
-		
 		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(0));
+		dc.signalerChangementDEtage();
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.DESCENDRE.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2.toString());
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "5");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += Message.DESCENDRE.toString();
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+	}
 	
-		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(0));
-		
-		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(0));
-	
-		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(0));
-		assertEquals(Message.ARRET_PROCHAIN.toString(), Logger.getLast());
-		
-		dc.signalerChangementDEtage();
-
-		assertEquals(String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), i--), Logger.getBeforeLast(0));
-		assertEquals(Message.ETEINDRE_BOUTON.toString(), d2.toString(), Logger.getLast()); 
-		
+	@Test
+	public void deuxAppelMemeEtage(){
+		memeSens9_1();
+		sensDifferent9_2();
 		
 	}
 	
+	private void memeSens9_1(){
+		Demande d = new Demande(3, Sens.INDEFINI);
+		Demande d2 = new Demande(3, Sens.MONTEE);
+		dc = new DoublureController(7, 0, Sens.INDEFINI, Sens.INDEFINI);
+		dc.demander(d);
+		dc.demander(d2);
+		dc.signalerChangementDEtage();
+		dc.signalerChangementDEtage();
+		dc.signalerChangementDEtage();
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+	}
+	
+	private void sensDifferent9_2(){
+		Demande d = new Demande(3, Sens.INDEFINI);
+		Demande d2 = new Demande(3, Sens.DESCENTE);
+		Demande d3 = new Demande(4, Sens.INDEFINI);
+		dc = new DoublureController(7, 0, Sens.INDEFINI, Sens.INDEFINI);
+		dc.demander(d);
+		dc.demander(d2);
+		dc.demander(d3);
+		dc.signalerChangementDEtage();
+		dc.signalerChangementDEtage();
+		dc.signalerChangementDEtage();
+		dc.signalerChangementDEtage();
+		dc.signalerChangementDEtage();
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d3);
+		message += Message.DESCENDRE.toString();
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+	}
+	
+	@Test
+	public void appelEtageEnCoursService(){
+		appelExInt10_1();
+		appelInterieur10_2();
+		appelExtMemeDirection10_3();
+		appelExtDifDirection10_4();
+	}
+	
+	private void appelExInt10_1(){
+		Demande d = new Demande(3, Sens.INDEFINI);
+		Demande d2 = new Demande(3, Sens.DESCENTE);
+		dc = new DoublureController(7, 1, Sens.INDEFINI, Sens.INDEFINI);
+		dc.demander(d);
+		dc.signalerChangementDEtage();
+		dc.demander(d2);
+		dc.signalerChangementDEtage();
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+	}
+	
+	private void appelInterieur10_2(){
+		Demande d = new Demande(3, Sens.INDEFINI);
+		Demande d2 = new Demande(3, Sens.INDEFINI);
+		dc = new DoublureController(7, 1, Sens.INDEFINI, Sens.INDEFINI);
+		dc.demander(d);
+		dc.signalerChangementDEtage();
+		dc.demander(d2);
+		dc.signalerChangementDEtage();
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+	
+		
+	}
+	
+	private void appelExtMemeDirection10_3(){
+		Demande d = new Demande(3, Sens.MONTEE);
+		Demande d2 = new Demande(3, Sens.MONTEE);
+		dc = new DoublureController(7, 1, Sens.INDEFINI, Sens.INDEFINI);
+		dc.demander(d);
+		dc.signalerChangementDEtage();
+		dc.demander(d2);
+		dc.signalerChangementDEtage();
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+	}
+	
+	private void appelExtDifDirection10_4(){
+		Demande d = new Demande(3, Sens.MONTEE);
+		Demande d2 = new Demande(3, Sens.DESCENTE);
+		dc = new DoublureController(7, 1, Sens.INDEFINI, Sens.INDEFINI);
+		dc.demander(d);
+		dc.signalerChangementDEtage();
+		dc.demander(d2);
+		dc.signalerChangementDEtage();
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message = String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+	}
+	
+	@Test
+	public void arretUrgence(){
+		Demande d = new Demande(3, Sens.INDEFINI);
+		Demande d2 = new Demande(3, Sens.DESCENTE);
+		Demande d3 = new Demande(4, Sens.INDEFINI);
+		dc = new DoublureController(7, 0, Sens.INDEFINI, Sens.INDEFINI);
+		dc.demander(d);
+		dc.demander(d2);
+		dc.demander(d3);
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d3);
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+	}
+	
+	@Test
+	public void repriseArretUrgence(){
+		Demande d = new Demande(3, Sens.INDEFINI);
+		Demande d2 = new Demande(3, Sens.DESCENTE);
+		Demande d3 = new Demande(4, Sens.INDEFINI);
+		dc = new DoublureController(7, 0, Sens.INDEFINI, Sens.INDEFINI);
+		dc.demander(d);
+		dc.demander(d2);
+		dc.demander(d3);
+		String message = String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
+		message += Message.MONTER.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "1");
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "2");
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d2);
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d3);
+		
+		
+		
+		 d = new Demande(3, Sens.MONTEE);
+		 d2 = new Demande(3, Sens.DESCENTE);
+		 d3 = new Demande(4, Sens.INDEFINI);
+	//	dc = new DoublureController(7, 3, Sens.INDEFINI, Sens.INDEFINI);
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d.toString());
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d2.toString());
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		message += String.format(Message.ALLUMER_BOUTON.toString(), d3.toString());
+		message += Message.MONTER.toString();
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "4");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d3);
+		message += Message.DESCENDRE.toString();
+		message += Message.ARRET_PROCHAIN.toString();
+		message += String.format(Message.SIGNALER_CHANGEMENT_ETAGE.toString(), "3");
+		message += String.format(Message.ETEINDRE_BOUTON.toString(), d);
+		assertEquals(message, Logger.getLog());
+		Logger.clearLog();
+		
+	}
 	
 	
 
