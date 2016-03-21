@@ -9,20 +9,22 @@ import outils.Demande;
 public interface IController {
 	
 	/**
-	 * Gère la demandes faite par l'utilisateur. Cela inclut le stockage des demande et
-	 * l'allumage des boutons de la cabine.
-	 * @param pDemande - Demande de l'utilisateur.
+	 * Gère la demandes faite par l'utilisateur. Cela inclut le stockage des
+	 * demande et l'allumage des boutons de la cabine.
+	 * 
+	 * @param pDemande
+	 *            - Demande de l'utilisateur.
 	 */
-	public void demander(Demande pDemande);
+	void demander(final Demande pDemande);
 	
 	/**
 	 * Gère l'arrêt d'urgence de l'ascenceur.
 	 */
-	public void arretDUrgence();
+	void arretDUrgence();
 	
 	/**
 	 * Gère le signalement de changement d'étage de l'ascenceur.
 	 */
-	public void signalerChangementDEtage();
+	void signalerChangementDEtage();
 	
 }
