@@ -31,7 +31,7 @@ public class ControllerTest {
 	@Before
 	public void setUp() {
 		cabine = new DoublureDeCabine();
-		iug = new DoublureDeIUG();
+		iug = new DoublureDeIUG(8);
 	}
 
 	@Test
