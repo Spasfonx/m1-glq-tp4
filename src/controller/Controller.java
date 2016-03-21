@@ -90,6 +90,9 @@ public class Controller implements IController {
 	@Override
 	public final void demander(final Demande pDemande) {
 		if (EnumEtatController.ATTENTE_DEMANDE.equals(etat)) {
+			this.stocker(pDemande);
+			this.iug.allumerBouton(pDemande);
+			
 			/* On initialise le sens de départ de la cabine */
 			int d = pDemande.etage() - position;
 			
@@ -112,8 +115,6 @@ public class Controller implements IController {
 				this.etat = EnumEtatController.ARRET_IMMINENT;
 			}
 			
-			this.stocker(pDemande);
-			this.iug.allumerBouton(pDemande);	
 			MAJSens();
 		} else if (EnumEtatController.ARRET_IMMINENT.equals(etat)) {
 			/* On vérifie que la demande ne soit pas l'étage 
@@ -151,7 +152,7 @@ public class Controller implements IController {
 		MAJPosition();
 		
 		Logger.writeLog(String.format(
-				Message.SIGNALER_CHANGEMENT_ETAGE.toString(), 
+				Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), 
 				this.position)
 			);
 		
@@ -184,7 +185,7 @@ public class Controller implements IController {
 			this.iug.eteindreBouton(new Demande(demandeSuivante.etage(),
 					Sens.INDEFINI));
 			
-			Logger.writeLog(Message.ARRET_PROCHAIN.toString());
+			Logger.writeLog(Message.ARRET_PROCHAIN.getMessage());
 		}
 		
 		if (EnumEtatController.ARRET_ETAGE.equals(etat)) {

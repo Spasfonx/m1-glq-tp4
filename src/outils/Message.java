@@ -29,4 +29,5 @@ public enum Message {
 	public String getMessage() {
 		return this.message;
 	}
+
 }
