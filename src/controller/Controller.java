@@ -161,10 +161,22 @@ public class Controller implements IController {
 		if ((EnumEtatController.MONTEE.equals(etat) 
 				|| EnumEtatController.DESCENTE.equals(etat))
 				&& demandeSuivante != null) {
+			// On doit s'arrêter aux prochains etage (cas normal)
 			if ((demandeSuivante.etage() == this.position + 1
 					&& Sens.MONTEE.equals(demandeSuivante.sens()))
 				|| (demandeSuivante.etage() == this.position - 1
 						&& Sens.DESCENTE.equals(demandeSuivante.sens()))) {
+				this.cabine.arreterProchainNiveau();
+				this.etat = EnumEtatController.ARRET_IMMINENT;
+			} 
+			
+			// On doit s'arrêter au prochain étage, cas extrêmes
+			else if ((demandeSuivante.etage() == this.position + 1
+						&& demandeSuivante.etage() == this.nombreEtages - 1
+						&& Sens.DESCENTE.equals(demandeSuivante.sens()))
+					|| (demandeSuivante.etage() == this.position - 1
+						&& demandeSuivante.etage() == 0 
+						&& Sens.MONTEE.equals(demandeSuivante.sens()))) {
 				this.cabine.arreterProchainNiveau();
 				this.etat = EnumEtatController.ARRET_IMMINENT;
 			}
@@ -174,11 +186,6 @@ public class Controller implements IController {
 			etat = EnumEtatController.ARRET_ETAGE;
 			this.enleverDuStock(demandeSuivante);
 			
-			Logger.writeLog(Message.ARRET_PROCHAIN.getMessage());
-		}
-		
-		if (EnumEtatController.ARRET_ETAGE.equals(etat)) {
-			
 			/*
 			 * On peux éteindre à chaque fois la demande satisfaite en plus
 			 * d'eteindre la même demande au Sens INDEFINI puisqu'on sait que si
@@ -186,9 +193,14 @@ public class Controller implements IController {
 			 * eteindre et le bouton 4M et le bouton 4 dans la cabine puisque
 			 * c'est les mêmes demandes dans notre système
 			 */
-			this.iug.eteindreBouton(new Demande(this.position,this.sens));
-			this.iug.eteindreBouton(new Demande(this.position,
+			this.iug.eteindreBouton(demandeSuivante);
+			this.iug.eteindreBouton(new Demande(demandeSuivante.etage(),
 					Sens.INDEFINI));
+			
+			Logger.writeLog(Message.ARRET_PROCHAIN.getMessage());
+		}
+		
+		else if (EnumEtatController.ARRET_ETAGE.equals(etat)) {
 					
 			if (demandeSuivante != null && !stockDemandes.estVide()) {
 				int delta = demandeSuivante.etage() - this.position;
