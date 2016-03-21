@@ -286,14 +286,15 @@ public class ControllerTest {
 		message += "\n" + String.format(Message.ALLUMER_BOUTON.getMessage(), d2);
 		message += "\n" + String.format(Message.ALLUMER_BOUTON.getMessage(), d3);
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "3");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);
 		message += "\n" + Message.ARRET_PROCHAIN.getMessage();
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "4");
-		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d2);
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "5");
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "6");
+		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
 		message += "\n" + Message.ARRET_PROCHAIN.getMessage();
 		message += "\n" + String.format(Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), "7");
-		message += "\n" + String.format(Message.ETEINDRE_BOUTON.getMessage(), d);
+		message += "\n" + Message.DESCENDRE.getMessage();
 		assertEquals(message, Logger.getLog());
 		Logger.clearLog();
 	}
