@@ -89,20 +89,17 @@ public class Controller implements IController {
 	 */
 	@Override
 	public final void demander(final Demande pDemande) {
+		Demande demandeActuelle = new Demande(pDemande.etage(), pDemande.sens());
+		
 		if (EnumEtatController.ATTENTE_DEMANDE.equals(etat)) {
-			this.stocker(pDemande);
-			this.iug.allumerBouton(pDemande);
+			this.iug.allumerBouton(demandeActuelle);
+			this.stocker(demandeActuelle);
 			
 			/* On initialise le sens de départ de la cabine */
-			int d = pDemande.etage() - position;
+			int d = demandeActuelle.etage() - position;
 			
-			if (pDemande.etage() > position) {
-				this.cabine.monter();
-				this.etat = EnumEtatController.MONTEE;
-			} else if (pDemande.etage() < position) {
-				this.cabine.descendre();
-				this.etat = EnumEtatController.DESCENTE;
-			} else if (Math.abs(d) == 1) {
+			/* Si c'est directement l'étage suivant */
+			if (Math.abs(d) == 1) {
 				if (d == 1) {
 					this.cabine.monter();
 					this.etat = EnumEtatController.MONTEE;
@@ -111,39 +108,56 @@ public class Controller implements IController {
 					this.etat = EnumEtatController.DESCENTE;
 				}
 
+				MAJSens();
+				
+				this.eteindreBouton(demandeActuelle);
+				
 				this.cabine.arreterProchainNiveau();
-				this.etat = EnumEtatController.ARRET_IMMINENT;
-			}
+				this.etat = EnumEtatController.ARRET_ETAGE;
+				
+				Logger.writeLog(Message.ARRET_PROCHAIN.getMessage());
+			/* Sinon */
+			} else if (demandeActuelle.etage() > position) {
+				this.cabine.monter();
+				this.etat = EnumEtatController.MONTEE;
+			} else if (demandeActuelle.etage() < position) {
+				this.cabine.descendre();
+				this.etat = EnumEtatController.DESCENTE;
+			} 
 			
 			/* Demande au même palier */ //TODO: VERIFIER TOUS LES CAS !!!!!
-			if (this.position == pDemande.etage() && Sens.INDEFINI.equals(this.sens)) {
-				this.iug.eteindreBouton(pDemande);
+			if (this.position == demandeActuelle.etage() && (demandeActuelle.sens().equals((this.sens))
+					|| Sens.INDEFINI.equals(this.sens))) {
+				this.eteindreBouton(demandeActuelle);
 			}
 			
-			MAJSens();
-		} else if (EnumEtatController.ARRET_IMMINENT.equals(etat)) {
+			if (!EnumEtatController.ARRET_IMMINENT.equals(this.etat)
+					&& !EnumEtatController.ARRET_ETAGE.equals(this.etat)) {
+				MAJSens();
+			}
+		} else if (EnumEtatController.ARRET_ETAGE.equals(etat)) {
 			/* On vérifie que la demande ne soit pas l'étage 
 			 * sur lequel on va déjà s'arrêté */
 			if (Sens.MONTEE.equals(this.sens) 
-					&& (pDemande.etage() != this.position + 1 
-						|| !pDemande.sens().equals(this.sens))
+					&& (demandeActuelle.etage() != this.position + 1 
+						|| !demandeActuelle.sens().equals(this.sens))
 				|| Sens.DESCENTE.equals(this.sens) 
-					&& (pDemande.etage() != this.position - 1 
-						|| !pDemande.sens().equals(this.sens))) {
-				stocker(pDemande);
-				this.iug.allumerBouton(pDemande);
+					&& (demandeActuelle.etage() != this.position - 1 
+						|| !demandeActuelle.sens().equals(this.sens))) {
+				this.iug.allumerBouton(demandeActuelle);
+				stocker(demandeActuelle);
 			}
-		} else if (EnumEtatController.ARRET_ETAGE.equals(etat)) {
+		} /*else if (EnumEtatController.ARRET_ETAGE.equals(etat)) {
 			/* On vérifie que la demande ne soit pas l'étage
-			 * sur lequel on est déjà arrêté */
-			if (pDemande.etage() != this.position 
-					|| pDemande.sens() != this.sens) {
-				this.stocker(pDemande);
-				this.iug.allumerBouton(pDemande);
+			 * sur lequel on est déjà arrêté
+			if (demandeActuelle.etage() != this.position 
+					|| demandeActuelle.sens() != this.sens) {
+				this.iug.allumerBouton(demandeActuelle);
+				this.stocker(demandeActuelle);
 			}
-		} else {
-			stocker(pDemande);
-			this.iug.allumerBouton(pDemande);
+		} */else {
+			this.iug.allumerBouton(demandeActuelle);
+			stocker(demandeActuelle);
 		}
 		
 		
@@ -177,10 +191,10 @@ public class Controller implements IController {
 			
 			// On doit s'arrêter au prochain étage, cas extrêmes
 			else if ((demandeSuivante.etage() == this.position + 1
-						&& demandeSuivante.etage() == this.nombreEtages - 1
+						&& (demandeSuivante.etage() == this.nombreEtages - 1 || stockDemandes.taille() <= 1)
 						&& Sens.DESCENTE.equals(demandeSuivante.sens()))
 					|| (demandeSuivante.etage() == this.position - 1
-						&& demandeSuivante.etage() == 0 
+						&& (demandeSuivante.etage() == 0 || stockDemandes.taille() <= 1) 
 						&& Sens.MONTEE.equals(demandeSuivante.sens()))) {
 				this.cabine.arreterProchainNiveau();
 				this.etat = EnumEtatController.ARRET_IMMINENT;
@@ -189,18 +203,8 @@ public class Controller implements IController {
 		
 		if (EnumEtatController.ARRET_IMMINENT.equals(etat)) {
 			etat = EnumEtatController.ARRET_ETAGE;
-			this.enleverDuStock(demandeSuivante);
-			
-			/*
-			 * On peux éteindre à chaque fois la demande satisfaite en plus
-			 * d'eteindre la même demande au Sens INDEFINI puisqu'on sait que si
-			 * par exemple l'étage 4 en montée est satisfait, alors on peux
-			 * eteindre et le bouton 4M et le bouton 4 dans la cabine puisque
-			 * c'est les mêmes demandes dans notre système
-			 */
-			this.iug.eteindreBouton(demandeSuivante);
-			this.iug.eteindreBouton(new Demande(demandeSuivante.etage(),
-					Sens.INDEFINI));
+
+			this.eteindreBouton(demandeSuivante);
 			
 			Logger.writeLog(Message.ARRET_PROCHAIN.getMessage());
 		}
@@ -222,9 +226,15 @@ public class Controller implements IController {
 						this.cabine.descendre();
 						this.etat = EnumEtatController.DESCENTE;
 					}
+				
+					MAJSens();
 					
 					this.cabine.arreterProchainNiveau();
-					this.etat = EnumEtatController.ARRET_IMMINENT; 
+					this.etat = EnumEtatController.ARRET_ETAGE;
+					
+					this.eteindreBouton(demandeSuivante);
+					
+					Logger.writeLog(Message.ARRET_PROCHAIN.getMessage());
 				
 				/* Dans le cas normal */
 				} else {
@@ -234,6 +244,8 @@ public class Controller implements IController {
 					} else if (demandeSuivante.etage() < this.position) {
 						this.cabine.descendre();
 						this.etat = EnumEtatController.DESCENTE;
+					} else {
+						this.eteindreBouton(demandeSuivante);
 					}
 				}
 				
@@ -241,7 +253,10 @@ public class Controller implements IController {
 				etat = EnumEtatController.ATTENTE_DEMANDE;
 			}
 			
-			MAJSens();
+			if (!EnumEtatController.ARRET_IMMINENT.equals(this.etat)
+					&& !EnumEtatController.ARRET_ETAGE.equals(this.etat)) {
+				MAJSens();
+			}
 			
 		}
 	}
@@ -263,7 +278,9 @@ public class Controller implements IController {
 			this.etat = EnumEtatController.ARRET_IMMEDIAT;
 			this.cabine.arreter();
 			MAJSens();
-		} else {
+		} 
+		
+		if (EnumEtatController.ARRET_IMMEDIAT.equals(etat)){
 			this.etat = EnumEtatController.ATTENTE_DEMANDE;
 		}
 	}
@@ -361,6 +378,21 @@ public class Controller implements IController {
 			this.iug.eteindreBouton(new Demande(i, Sens.DESCENTE));
 			this.iug.eteindreBouton(new Demande(i, Sens.INDEFINI));
 		}
+	}
+	
+	private void eteindreBouton(Demande d) {
+		this.enleverDuStock(d);
+		
+		/*
+		 * On peux éteindre à chaque fois la demande satisfaite en plus
+		 * d'eteindre la même demande au Sens INDEFINI puisqu'on sait que si
+		 * par exemple l'étage 4 en montée est satisfait, alors on peux
+		 * eteindre et le bouton 4M et le bouton 4 dans la cabine puisque
+		 * c'est les mêmes demandes dans notre système
+		 */
+		this.iug.eteindreBouton(d);
+		this.iug.eteindreBouton(new Demande(d.etage(),
+				Sens.INDEFINI));
 	}
 
 }
