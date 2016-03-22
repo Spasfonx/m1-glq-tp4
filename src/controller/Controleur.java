@@ -1,26 +1,28 @@
 package controller;
 
-import iug.IIUG;
+import operative.ICabine;
+import operative.IIUG;
 import outils.Demande;
 import outils.Logger;
 import outils.Message;
 import outils.Sens;
-import cabine.ICabine;
+import commande.IControleur;
+import commande.IListeTrieeCirculaire;
 import commande.ListeTrieeCirculaireDeDemandes;
 
 /**
- * Classe Controller permettant de gérer les demandes entre l'iug et la cabine. 
+ * Classe Controller permettant de gÃ©rer les demandes entre l'iug et la cabine. 
  * @author Christophe
  */
-public class Controller implements IController {
+public class Controleur implements IControleur {
 
 	/**
-	 * Nombre d'étage maximal que gère le controlleur.
+	 * Nombre d'Ã©tage maximal que gÃ¨re le controlleur.
 	 */
 	private int nombreEtages;
 	
 	/**
-	 * Position à l'instant actuel de la cabine.
+	 * Position Ã  l'instant actuel de la cabine.
 	 */
 	private int position;
 	
@@ -32,15 +34,15 @@ public class Controller implements IController {
 	/**
 	 * Liste des demandes en attente.
 	 */
-	private ListeTrieeCirculaireDeDemandes stockDemandes;
+	private IListeTrieeCirculaire<Demande> stockDemandes;
 	
 	/**
-	 * Reférence à l'objet représentant l'iug.
+	 * RefÃ©rence Ã  l'objet reprÃ©sentant l'iug.
 	 */
 	private IIUG iug;
 	
 	/**
-	 * Reférence à l'objet représentant la cabine.
+	 * RefÃ©rence Ã  l'objet reprÃ©sentant la cabine.
 	 */
 	private ICabine cabine;
 	
@@ -54,11 +56,11 @@ public class Controller implements IController {
 	 * Constructeur de la classe. 
 	 * @param pCabine - Lien vers la cabine
 	 * @param pIUG - Lien vers l'iug
-	 * @param pNombreEtages - Nombre d'étage maximal que gère le controlleur
+	 * @param pNombreEtages - Nombre d'Ã©tage maximal que gÃ¨re le controlleur
 	 * @param pPosition - Position actuelle
 	 * @param pSens - Sens actuel
 	 */
-	public Controller(final ICabine pCabine, final IIUG pIUG,
+	public Controleur(final ICabine pCabine, final IIUG pIUG,
 			final int pNombreEtages, final int pPosition, final Sens pSens) {
 		this.nombreEtages = pNombreEtages;
 		this.position = pPosition;
@@ -68,6 +70,27 @@ public class Controller implements IController {
 		this.iug = pIUG;
 
 		this.stockDemandes = new ListeTrieeCirculaireDeDemandes(pNombreEtages);
+		this.etat = EnumEtatController.ATTENTE_DEMANDE;
+	}
+	
+	/**
+	 * Constructeur de la classe. 
+	 * @param pCabine - Lien vers la cabine
+	 * @param pIUG - Lien vers l'iug
+	 * @param pNombreEtages - Nombre d'Ã©tage maximal que gÃ¨re le controlleur
+	 * @param pPosition - Position actuelle
+	 * @param pSens - Sens actuel
+	 */
+	public Controleur(final int pNombreEtages, final IIUG pIUG, 
+			final ICabine pCabine, IListeTrieeCirculaire<Demande> stock) {
+		this.nombreEtages = pNombreEtages;
+		this.position = 0;
+		this.sens = Sens.INDEFINI;
+		
+		this.cabine = pCabine;
+		this.iug = pIUG;
+
+		this.stockDemandes = stock;
 		this.etat = EnumEtatController.ATTENTE_DEMANDE;
 	}
 	
@@ -82,10 +105,10 @@ public class Controller implements IController {
 			this.iug.allumerBouton(demandeActuelle);
 			this.stocker(demandeActuelle);
 			
-			/* On initialise le sens de départ de la cabine */
+			/* On initialise le sens de dÃ©part de la cabine */
 			int d = demandeActuelle.etage() - position;
 			
-			/* Si c'est directement l'étage suivant */
+			/* Si c'est directement l'Ã©tage suivant */
 			if (Math.abs(d) == 1) {
 				if (d == 1) {
 					this.cabine.monter();
@@ -102,7 +125,7 @@ public class Controller implements IController {
 				this.cabine.arreterProchainNiveau();
 				this.etat = EnumEtatController.ARRET_ETAGE;
 				
-				Logger.writeLog(Message.ARRET_PROCHAIN.getMessage());
+				this.iug.ajouterMessage(Message.ARRET_PROCHAIN.getMessage());
 			/* Sinon */
 			} else if (demandeActuelle.etage() > position) {
 				this.cabine.monter();
@@ -112,7 +135,7 @@ public class Controller implements IController {
 				this.etat = EnumEtatController.DESCENTE;
 			} 
 			
-			/* Demande au même palier */
+			/* Demande au mÃªme palier */
 			if (this.position == demandeActuelle.etage() && (demandeActuelle.sens().equals((this.sens))
 					|| Sens.INDEFINI.equals(this.sens))) {
 				this.eteindreBouton(demandeActuelle);
@@ -123,8 +146,8 @@ public class Controller implements IController {
 				MAJSens();
 			}
 		} else if (EnumEtatController.ARRET_ETAGE.equals(etat)) {
-			/* On vérifie que la demande ne soit pas l'étage 
-			 * sur lequel on va déjà s'arrêté */
+			/* On vÃ©rifie que la demande ne soit pas l'Ã©tage 
+			 * sur lequel on va dÃ©jÃ  s'arrÃªtÃ© */
 			if (Sens.MONTEE.equals(this.sens) 
 					&& (demandeActuelle.etage() != this.position + 1 
 						|| !demandeActuelle.sens().equals(this.sens))
@@ -135,8 +158,8 @@ public class Controller implements IController {
 				stocker(demandeActuelle);
 			}
 		} /*else if (EnumEtatController.ARRET_ETAGE.equals(etat)) {
-			/* On vérifie que la demande ne soit pas l'étage
-			 * sur lequel on est déjà arrêté
+			/* On vÃ©rifie que la demande ne soit pas l'Ã©tage
+			 * sur lequel on est dÃ©jÃ  arrÃªtÃ©
 			if (demandeActuelle.etage() != this.position 
 					|| demandeActuelle.sens() != this.sens) {
 				this.iug.allumerBouton(demandeActuelle);
@@ -147,6 +170,9 @@ public class Controller implements IController {
 			stocker(demandeActuelle);
 		}
 		
+		System.out.println("\n");
+		System.out.println(demandeActuelle);
+		System.out.println(this.stockDemandes);
 		
 	}
 
@@ -154,10 +180,10 @@ public class Controller implements IController {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void signalerChangementDEtage() {
+	public final synchronized void signalerChangementDEtage() {
 		MAJPosition();
 		
-		Logger.writeLog(String.format(
+		this.iug.ajouterMessage(String.format(
 				Message.SIGNALER_CHANGEMENT_ETAGE.getMessage(), 
 				this.position)
 			);
@@ -167,7 +193,7 @@ public class Controller implements IController {
 		if ((EnumEtatController.MONTEE.equals(etat) 
 				|| EnumEtatController.DESCENTE.equals(etat))
 				&& demandeSuivante != null) {
-			// On doit s'arrêter aux prochains etage (cas normal)
+			// On doit s'arrÃªter aux prochains etage (cas normal)
 			if ((demandeSuivante.etage() == this.position + 1
 					&& Sens.MONTEE.equals(demandeSuivante.sens()))
 				|| (demandeSuivante.etage() == this.position - 1
@@ -176,7 +202,7 @@ public class Controller implements IController {
 				this.etat = EnumEtatController.ARRET_IMMINENT;
 			} 
 			
-			// On doit s'arrêter au prochain étage, cas extrêmes
+			// On doit s'arrÃªter au prochain Ã©tage, cas extrÃªmes
 			else if ((demandeSuivante.etage() == this.position + 1
 						&& (demandeSuivante.etage() == this.nombreEtages - 1 || stockDemandes.taille() <= 1)
 						&& Sens.DESCENTE.equals(demandeSuivante.sens()))
@@ -193,7 +219,7 @@ public class Controller implements IController {
 
 			this.eteindreBouton(demandeSuivante);
 			
-			Logger.writeLog(Message.ARRET_PROCHAIN.getMessage());
+			this.iug.ajouterMessage(Message.ARRET_PROCHAIN.getMessage());
 		}
 		
 		else if (EnumEtatController.ARRET_ETAGE.equals(etat)) {
@@ -202,8 +228,8 @@ public class Controller implements IController {
 				int delta = demandeSuivante.etage() - this.position;
 				
 				/*
-				 * Dans le cas où la demande suivante est l'étage directement
-				 * supérieur/inférieur
+				 * Dans le cas oÃ¹ la demande suivante est l'Ã©tage directement
+				 * supÃ©rieur/infÃ©rieur
 				 */
 				if (Math.abs(delta) == 1) {
 					if (delta == 1) {
@@ -221,7 +247,7 @@ public class Controller implements IController {
 					
 					this.eteindreBouton(demandeSuivante);
 					
-					Logger.writeLog(Message.ARRET_PROCHAIN.getMessage());
+					this.iug.ajouterMessage(Message.ARRET_PROCHAIN.getMessage());
 				
 				/* Dans le cas normal */
 				} else {
@@ -252,7 +278,7 @@ public class Controller implements IController {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void arretDUrgence() {
+	public final synchronized void arretUrgence() {
 		this.eteindreTousBoutons();
 		this.viderStock();
 		
@@ -265,20 +291,18 @@ public class Controller implements IController {
 			this.etat = EnumEtatController.ARRET_IMMEDIAT;
 			this.cabine.arreter();
 			MAJSens();
-		} 
-		
-		if (EnumEtatController.ARRET_IMMEDIAT.equals(etat)){
+		} else if (EnumEtatController.ARRET_IMMEDIAT.equals(etat)){
 			this.etat = EnumEtatController.ATTENTE_DEMANDE;
 		}
 	}
 	
 	/**
-	 * Renvoie la demande suivante dans le stock par rapport à la position 
+	 * Renvoie la demande suivante dans le stock par rapport Ã  la position 
 	 * et au sens actuel du controller.
-	 * @return Un objet représentant la demande suivante dans le stock,
+	 * @return Un objet reprÃ©sentant la demande suivante dans le stock,
 	 * null s'il n'y a pas d'autre demandes.
 	 */
-	private Demande interrogerStock() {
+	private synchronized Demande interrogerStock() {
 		return stockDemandes.suivantDe(
 				new Demande(this.position, sens)
 			);
@@ -287,15 +311,15 @@ public class Controller implements IController {
 	/**
 	 * Stock une demande dans le stock de demande. Si le sens de la demande est
 	 * INDEFINI, on la transforme alors en MONTEE ou en DESCENTE selon les
-	 * caractéristiques de la demande et le sens courant.
+	 * caractÃ©ristiques de la demande et le sens courant.
 	 * 
 	 * @param pDemande
-	 *            - Demande à stocker
+	 *            - Demande Ã  stocker
 	 */
-	private void stocker(final Demande pDemande) {
+	private synchronized void stocker(final Demande pDemande) {
 		/* Transformation du sens d'une demande si elle est INDEFINI */
 		if (pDemande.estIndefini()) {
-			/* On test les cas bornés */
+			/* On test les cas bornÃ©s */
 			if (pDemande.etage() == 0) {
 				pDemande.changeSens(Sens.MONTEE);
 			} else if (pDemande.etage() == this.nombreEtages - 1) {
@@ -316,37 +340,39 @@ public class Controller implements IController {
 	}
 	
 	/**
-	 * Retire la demande passée en paramètre du stock de demandes.
-	 * @param pDemande - Demande à retirer
+	 * Retire la demande passÃ©e en paramÃ¨tre du stock de demandes.
+	 * @param pDemande - Demande Ã  retirer
 	 */
-	private void enleverDuStock(final Demande pDemande) {
+	private synchronized void enleverDuStock(final Demande pDemande) {
 		this.stockDemandes.supprimer(pDemande);
 	}
 	
 	/**
 	 * Vide le stock de demandes.
 	 */
-	private void viderStock() {
+	private synchronized void viderStock() {
 		this.stockDemandes.vider();
 	}
 	
 	/**
-	 * Met à jour la position de la cabine enregistré dans le controlleur en
-	 * fonction du sens de déplacement de la cabine.
+	 * Met Ã  jour la position de la cabine enregistrÃ© dans le controlleur en
+	 * fonction du sens de dÃ©placement de la cabine.
 	 */
-	private final void MAJPosition() {
+	private synchronized final void MAJPosition() {
 		if (Sens.MONTEE.equals(this.sens)) {
 			this.position++;
 		} else if (Sens.DESCENTE.equals(this.sens)) {
 			this.position--;
 		}
+		
+		this.iug.changerPosition(this.position);
 	}
 	
 	/**
-	 * Met à jour le sens de la cabine enregistré dans le controlleur en
-	 * fonction de l'état actuel de celui-ci.
+	 * Met Ã  jour le sens de la cabine enregistrÃ© dans le controlleur en
+	 * fonction de l'Ã©tat actuel de celui-ci.
 	 */
-	private final void MAJSens() {
+	private synchronized final void MAJSens() {
 		if (EnumEtatController.MONTEE.equals(this.etat)) {
 			this.sens = Sens.MONTEE;
 		} else if (EnumEtatController.DESCENTE.equals(this.etat)) {
@@ -359,27 +385,38 @@ public class Controller implements IController {
 	/**
 	 * Eteint tous les boutons dans et en dehors de la cabine.
 	 */
-	private void eteindreTousBoutons() {
-		for (int i = 0; i < this.nombreEtages - 1; i++) {
-			this.iug.eteindreBouton(new Demande(i, Sens.MONTEE));
-			this.iug.eteindreBouton(new Demande(i, Sens.DESCENTE));
+	private synchronized void eteindreTousBoutons() {
+		for (int i = 0; i < this.nombreEtages; i++) {
 			this.iug.eteindreBouton(new Demande(i, Sens.INDEFINI));
+			
+			if (i != 0) {
+				this.iug.eteindreBouton(new Demande(i, Sens.DESCENTE));
+			}
+			
+			if (i != this.nombreEtages - 1) {
+				this.iug.eteindreBouton(new Demande(i, Sens.MONTEE));
+			}
 		}
 	}
 	
-	private void eteindreBouton(Demande d) {
+	private synchronized void eteindreBouton(Demande d) {
 		this.enleverDuStock(d);
 		
 		/*
-		 * On peux éteindre à chaque fois la demande satisfaite en plus
-		 * d'eteindre la même demande au Sens INDEFINI puisqu'on sait que si
-		 * par exemple l'étage 4 en montée est satisfait, alors on peux
+		 * On peux Ã©teindre Ã  chaque fois la demande satisfaite en plus
+		 * d'eteindre la mÃªme demande au Sens INDEFINI puisqu'on sait que si
+		 * par exemple l'Ã©tage 4 en montÃ©e est satisfait, alors on peux
 		 * eteindre et le bouton 4M et le bouton 4 dans la cabine puisque
-		 * c'est les mêmes demandes dans notre système
+		 * c'est les mÃªmes demandes dans notre systÃ¨me
 		 */
 		this.iug.eteindreBouton(d);
 		this.iug.eteindreBouton(new Demande(d.etage(),
 				Sens.INDEFINI));
+	}
+
+	@Override
+	public void exit() {
+		
 	}
 
 }

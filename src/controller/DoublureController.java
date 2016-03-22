@@ -1,10 +1,11 @@
 package controller;
 
 import outils.Demande;
-
 import outils.Sens;
 
-public class DoublureController implements IController {
+import commande.IControleur;
+
+public class DoublureController implements IControleur {
 
 	@Override
 	public void demander(Demande pDemande) {
@@ -12,7 +13,7 @@ public class DoublureController implements IController {
 	}
 
 	@Override
-	public void arretDUrgence() {
+	public void arretUrgence() {
 
 	}
 
@@ -27,6 +28,12 @@ public class DoublureController implements IController {
 	@Override
 	public void signalerChangementDEtage() {
 
+	}
+
+	@Override
+	public void exit() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -1,5 +1,8 @@
 package cabine;
 
+import commande.IControleur;
+
+import operative.ICabine;
 import outils.Logger;
 import outils.Message;
 
@@ -52,5 +55,11 @@ public class DoublureDeCabine implements ICabine {
 	 */
 	@Override
 	public void arreter() {}
+
+	@Override
+	public void assignerControleur(IControleur arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

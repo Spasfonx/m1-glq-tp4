@@ -39,7 +39,7 @@ public class Demande {
 	 * Renvoi le numéro de l'étage de la demande
 	 * @return
 	 */
-	public int etage() {
+	public Integer etage() {
 		return this.etage;
 	}
 

@@ -1,8 +1,7 @@
 
 package outils;
 
-import java.util.ArrayList;
-import java.util.List;
+import operative.IIUG;
 
 /**
  * Logger servant aux test JUNIT

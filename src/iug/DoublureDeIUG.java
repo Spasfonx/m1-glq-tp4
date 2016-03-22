@@ -1,5 +1,7 @@
 package iug;
 
+import commande.IControleur;
+import operative.IIUG;
 import outils.Demande;
 import outils.Logger;
 import outils.Message;
@@ -60,24 +62,22 @@ public class DoublureDeIUG implements IIUG {
 
 	}
 
-	public void ajouterMessage(String pString) {
+	@Override
+	public void assignerControleur(IControleur arg0) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
-	public void changerPosition(int pInt) {
+	@Override
+	public void ajouterMessage(String arg0) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
-	public void demander(Demande pDemande) {
+	@Override
+	public void changerPosition(int arg0) {
 		// TODO Auto-generated method stub
-
-	}
-
-	public void arretDUrgence() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

@@ -2,7 +2,8 @@ package test;
 
 import static org.junit.Assert.assertEquals;
 import iug.DoublureDeIUG;
-import iug.IIUG;
+import operative.ICabine;
+import operative.IIUG;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,9 +13,10 @@ import outils.Logger;
 import outils.Message;
 import outils.Sens;
 import cabine.DoublureDeCabine;
-import cabine.ICabine;
-import controller.Controller;
-import controller.IController;
+
+import commande.IControleur;
+
+import controller.Controleur;
 
 /**
  * Classe de test du controller.
@@ -23,7 +25,7 @@ import controller.IController;
  */
 public class ControllerTest {
 
-	private IController dc;
+	private IControleur dc;
 	private ICabine cabine;
 	private IIUG iug;
 
@@ -72,7 +74,7 @@ public class ControllerTest {
 
 	private void monter1_1() {
 		Demande d;
-		dc = new Controller(cabine, iug, 8, 3, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 3, Sens.INDEFINI);
 		d = new Demande(1, Sens.MONTEE);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
@@ -98,7 +100,7 @@ public class ControllerTest {
 
 	private void etageMoins1_1_1() {
 		Demande d;
-		dc = new Controller(cabine, iug, 8, 2, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 2, Sens.INDEFINI);
 		d = new Demande(1, Sens.MONTEE);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
@@ -121,7 +123,7 @@ public class ControllerTest {
 
 	private void descendre1_2() {
 		Demande d;
-		dc = new Controller(cabine, iug, 8, 3, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 3, Sens.INDEFINI);
 		d = new Demande(1, Sens.DESCENTE);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
@@ -161,7 +163,7 @@ public class ControllerTest {
 
 	private void monter2_1() {
 		Demande d;
-		dc = new Controller(cabine, iug, 8, 3, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 3, Sens.INDEFINI);
 		d = new Demande(5, Sens.MONTEE);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
@@ -184,7 +186,7 @@ public class ControllerTest {
 
 	private void etagePlusUn2_1_1() {
 		Demande d;
-		dc = new Controller(cabine, iug, 8, 3, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 3, Sens.INDEFINI);
 		d = new Demande(4, Sens.MONTEE);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
@@ -218,7 +220,7 @@ public class ControllerTest {
 
 	private void monter3_1() {
 		Demande d;
-		dc = new Controller(cabine, iug, 8, 3, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 3, Sens.INDEFINI);
 		d = new Demande(3, Sens.MONTEE);
 		dc.demander(d);
 		String message = "\n"
@@ -231,7 +233,7 @@ public class ControllerTest {
 
 	private void descendre3_2() {
 		Demande d;
-		dc = new Controller(cabine, iug, 8, 3, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 3, Sens.INDEFINI);
 		d = new Demande(3, Sens.DESCENTE);
 		dc.demander(d);
 		String message = "\n"
@@ -255,12 +257,12 @@ public class ControllerTest {
 
 	private void directionOppose4_1() {
 		Demande d;
-		dc = new Controller(cabine, iug, 8, 0, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 0, Sens.INDEFINI);
 		d = new Demande(3, Sens.MONTEE);
 		
 		dc.demander(d);
 		dc.signalerChangementDEtage();
-		dc.arretDUrgence();
+		dc.arretUrgence();
 		
 		dc.demander(d);
 		dc.signalerChangementDEtage();
@@ -303,7 +305,7 @@ public class ControllerTest {
 
 	private void monte5_1() {
 		Demande d;
-		dc = new Controller(cabine, iug, 8, 1, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 1, Sens.INDEFINI);
 		d = new Demande(5, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
@@ -343,7 +345,7 @@ public class ControllerTest {
 
 	private void descend5_2() {
 		Demande d;
-		dc = new Controller(cabine, iug, 8, 7, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 7, Sens.INDEFINI);
 		d = new Demande(1, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
@@ -403,7 +405,7 @@ public class ControllerTest {
 		Demande d;
 		Demande d2 = new Demande(4, Sens.MONTEE);
 		Demande d3 = new Demande(3, Sens.DESCENTE);
-		dc = new Controller(cabine, iug, 8, 1, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 1, Sens.INDEFINI);
 		d = new Demande(7, Sens.INDEFINI);
 
 		dc.demander(d);
@@ -476,7 +478,7 @@ public class ControllerTest {
 	private void sansChangementSens7_1() {
 		Demande d;
 		Demande d2 = new Demande(4, Sens.DESCENTE);
-		dc = new Controller(cabine, iug, 8, 7, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 7, Sens.INDEFINI);
 		d = new Demande(1, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
@@ -524,7 +526,7 @@ public class ControllerTest {
 	private void avecChangementSens7_2() {
 		Demande d;
 		Demande d2 = new Demande(7, Sens.DESCENTE);
-		dc = new Controller(cabine, iug, 8, 7, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 7, Sens.INDEFINI);
 		d = new Demande(4, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
@@ -576,7 +578,7 @@ public class ControllerTest {
 		Demande d2 = new Demande(7, Sens.DESCENTE);
 		Demande d3 = new Demande(2, Sens.DESCENTE);
 		Demande d4 = new Demande(1, Sens.INDEFINI);
-		dc = new Controller(cabine, iug, 8, 7, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 7, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
@@ -691,7 +693,7 @@ public class ControllerTest {
 		Demande d = new Demande(5, Sens.INDEFINI);
 		Demande d2 = new Demande(4, Sens.MONTEE);
 		Demande d3 = new Demande(4, Sens.DESCENTE);
-		dc = new Controller(cabine, iug, 8, 1, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 1, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.demander(d2);
@@ -754,7 +756,7 @@ public class ControllerTest {
 	private void memeSens9_1() {
 		Demande d = new Demande(3, Sens.INDEFINI);
 		Demande d2 = new Demande(3, Sens.MONTEE);
-		dc = new Controller(cabine, iug, 8, 0, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 0, Sens.INDEFINI);
 		dc.demander(d);
 		dc.demander(d2);
 		dc.signalerChangementDEtage();
@@ -790,7 +792,7 @@ public class ControllerTest {
 		Demande d = new Demande(3, Sens.INDEFINI);
 		Demande d2 = new Demande(3, Sens.DESCENTE);
 		Demande d3 = new Demande(4, Sens.INDEFINI);
-		dc = new Controller(cabine, iug, 8, 0, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 0, Sens.INDEFINI);
 		dc.demander(d);
 		dc.demander(d2);
 		dc.demander(d3);
@@ -862,7 +864,7 @@ public class ControllerTest {
 	private void appelExInt10_1() {
 		Demande d = new Demande(3, Sens.INDEFINI);
 		Demande d2 = new Demande(3, Sens.DESCENTE);
-		dc = new Controller(cabine, iug, 8, 1, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 1, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.demander(d2);
@@ -894,7 +896,7 @@ public class ControllerTest {
 	private void appelInterieur10_2() {
 		Demande d = new Demande(3, Sens.INDEFINI);
 		Demande d2 = new Demande(3, Sens.INDEFINI);
-		dc = new Controller(cabine, iug, 8, 1, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 1, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.demander(d2);
@@ -925,7 +927,7 @@ public class ControllerTest {
 	private void appelExtMemeDirection10_3() {
 		Demande d = new Demande(3, Sens.MONTEE);
 		Demande d2 = new Demande(3, Sens.MONTEE);
-		dc = new Controller(cabine, iug, 8, 1, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 1, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.demander(d2);
@@ -950,7 +952,7 @@ public class ControllerTest {
 	private void appelExtDifDirection10_4() {
 		Demande d = new Demande(3, Sens.MONTEE);
 		Demande d2 = new Demande(3, Sens.DESCENTE);
-		dc = new Controller(cabine, iug, 8, 1, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 1, Sens.INDEFINI);
 		dc.demander(d);
 		dc.signalerChangementDEtage();
 		dc.demander(d2);
@@ -984,13 +986,13 @@ public class ControllerTest {
 		Demande d = new Demande(3, Sens.INDEFINI);
 		Demande d2 = new Demande(3, Sens.DESCENTE);
 		Demande d3 = new Demande(4, Sens.INDEFINI);
-		dc = new Controller(cabine, iug, 8, 0, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 0, Sens.INDEFINI);
 		dc.demander(d);
 		dc.demander(d2);
 		dc.demander(d3);
 		dc.signalerChangementDEtage();
 		dc.signalerChangementDEtage();
-		dc.arretDUrgence();
+		dc.arretUrgence();
 		String message = "\n"
 				+ String.format(Message.ALLUMER_BOUTON.getMessage(), d);
 		message += "\n" + Message.MONTER.getMessage();
@@ -1024,7 +1026,7 @@ public class ControllerTest {
 		Demande d = new Demande(3, Sens.MONTEE);
 		Demande d2 = new Demande(3, Sens.DESCENTE);
 		Demande d3 = new Demande(4, Sens.INDEFINI);
-		dc = new Controller(cabine, iug, 8, 3, Sens.INDEFINI);
+		dc = new Controleur(cabine, iug, 8, 3, Sens.INDEFINI);
 		dc.demander(d);
 		dc.demander(d2);
 		dc.demander(d3);
