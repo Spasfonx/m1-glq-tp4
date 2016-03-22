@@ -18,6 +18,7 @@ public class Main {
 	    	int nbEtages = 7; // nombre d'étages
 	        int hauteurEtage = 3; // hauteur d'un étage en nombre de pas
 	        IIUG iug = new IUG( nbEtages);
+	        
 	        ICabine cabine = new Cabine( 
 	        		500, // délai d'un pas
 	        		hauteurEtage, // hauteur d'un étage en nombre de pas
