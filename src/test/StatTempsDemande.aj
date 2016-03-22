@@ -25,10 +25,9 @@ public aspect StatTempsDemande {
 
 	pointcut eteindreBoutonAppel() : call(void operative.IIUG.eteindreBouton(Demande));
 
-	pointcut exitAppel(): call(void commande.IControleur.exit());
+	pointcut exitAppel(): execution(void commande.IControleur.exit());
 
 	after():allumerBoutonAppel(){
-		System.out.println("dans allumer btn appel");
 		Demande d = (Demande) thisJoinPoint.getArgs()[0];
 		if((!hashDemande.containsKey(d)) && !d.sens().equals(Sens.INDEFINI) ){
 			hashDemande.put(d, new Date().getTime());
@@ -36,7 +35,6 @@ public aspect StatTempsDemande {
 	}
 
 	after():eteindreBoutonAppel(){
-		System.out.println("dans eteindre btn appel");
 		Demande d = (Demande) thisJoinPoint.getArgs()[0];
 		if(hashDemande.containsKey(d)){
 			lesStats.add(new Date().getTime() - hashDemande.get(d));
@@ -59,9 +57,9 @@ public aspect StatTempsDemande {
 	}
 	tempsMoy= tempsMoy/lesStats.size();
 	
-	System.out.println("temps max:"+tempsMax);
-	System.out.println("temps min:"+tempsMin);
-	System.out.println("temps moyen:"+tempsMoy);
+	System.out.println("temps max:"+tempsMax/1000 + "secondes");
+	System.out.println("temps min:"+tempsMin/1000 + "secondes");
+	System.out.println("temps moyen:"+tempsMoy/1000 + "secondes");
 	}
 
 }
