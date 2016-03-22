@@ -3,9 +3,9 @@ package controller;
 import operative.ICabine;
 import operative.IIUG;
 import outils.Demande;
-import outils.Logger;
 import outils.Message;
 import outils.Sens;
+
 import commande.IControleur;
 import commande.IListeTrieeCirculaire;
 import commande.ListeTrieeCirculaireDeDemandes;
@@ -111,9 +111,11 @@ public class Controleur implements IControleur {
 			/* Si c'est directement l'Ã©tage suivant */
 			if (Math.abs(d) == 1) {
 				if (d == 1) {
+					this.iug.ajouterMessage("Monter");
 					this.cabine.monter();
 					this.etat = EnumEtatController.MONTEE;
 				} else {
+					this.iug.ajouterMessage("Descendre");
 					this.cabine.descendre();
 					this.etat = EnumEtatController.DESCENTE;
 				}
@@ -128,9 +130,11 @@ public class Controleur implements IControleur {
 				this.iug.ajouterMessage(Message.ARRET_PROCHAIN.getMessage());
 			/* Sinon */
 			} else if (demandeActuelle.etage() > position) {
+				this.iug.ajouterMessage("Monter");
 				this.cabine.monter();
 				this.etat = EnumEtatController.MONTEE;
 			} else if (demandeActuelle.etage() < position) {
+				this.iug.ajouterMessage("Descendre");
 				this.cabine.descendre();
 				this.etat = EnumEtatController.DESCENTE;
 			} 
@@ -157,15 +161,27 @@ public class Controleur implements IControleur {
 				this.iug.allumerBouton(demandeActuelle);
 				stocker(demandeActuelle);
 			}
-		} /*else if (EnumEtatController.ARRET_ETAGE.equals(etat)) {
+			
 			/* On vÃ©rifie que la demande ne soit pas l'Ã©tage
-			 * sur lequel on est dÃ©jÃ  arrÃªtÃ©
+			 * sur lequel on est dÃ©jÃ  arrÃªtÃ©*/
 			if (demandeActuelle.etage() != this.position 
 					|| demandeActuelle.sens() != this.sens) {
 				this.iug.allumerBouton(demandeActuelle);
 				this.stocker(demandeActuelle);
 			}
-		} */else {
+		} else if (EnumEtatController.ARRET_IMMINENT.equals(etat)) {
+			/* On vÃ©rifie que la demande ne soit pas l'Ã©tage 
+			 * sur lequel on va dÃ©jÃ  s'arrÃªtÃ© */
+			if (Sens.MONTEE.equals(this.sens) 
+					&& (demandeActuelle.etage() != this.position + 1 
+						|| !demandeActuelle.sens().equals(this.sens))
+				|| Sens.DESCENTE.equals(this.sens) 
+					&& (demandeActuelle.etage() != this.position - 1 
+						|| !demandeActuelle.sens().equals(this.sens))) {
+				this.iug.allumerBouton(demandeActuelle);
+				stocker(demandeActuelle);
+			}
+		} else {
 			this.iug.allumerBouton(demandeActuelle);
 			stocker(demandeActuelle);
 		}
@@ -233,9 +249,11 @@ public class Controleur implements IControleur {
 				 */
 				if (Math.abs(delta) == 1) {
 					if (delta == 1) {
+						this.iug.ajouterMessage("Monter");
 						this.cabine.monter();
 						this.etat = EnumEtatController.MONTEE;
 					} else {
+						this.iug.ajouterMessage("Descendre");
 						this.cabine.descendre();
 						this.etat = EnumEtatController.DESCENTE;
 					}
@@ -252,13 +270,16 @@ public class Controleur implements IControleur {
 				/* Dans le cas normal */
 				} else {
 					if (demandeSuivante.etage() > this.position) {
+						this.iug.ajouterMessage("Monter");
 						this.cabine.monter();
 						this.etat = EnumEtatController.MONTEE;
 					} else if (demandeSuivante.etage() < this.position) {
+						this.iug.ajouterMessage("Descendre");
 						this.cabine.descendre();
 						this.etat = EnumEtatController.DESCENTE;
 					} else {
 						this.eteindreBouton(demandeSuivante);
+						this.etat = EnumEtatController.ATTENTE_DEMANDE;
 					}
 				}
 				
@@ -278,7 +299,7 @@ public class Controleur implements IControleur {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final synchronized void arretUrgence() {
+	public final void arretUrgence() {
 		this.eteindreTousBoutons();
 		this.viderStock();
 		
@@ -302,7 +323,7 @@ public class Controleur implements IControleur {
 	 * @return Un objet reprÃ©sentant la demande suivante dans le stock,
 	 * null s'il n'y a pas d'autre demandes.
 	 */
-	private synchronized Demande interrogerStock() {
+	private Demande interrogerStock() {
 		return stockDemandes.suivantDe(
 				new Demande(this.position, sens)
 			);
@@ -350,7 +371,7 @@ public class Controleur implements IControleur {
 	/**
 	 * Vide le stock de demandes.
 	 */
-	private synchronized void viderStock() {
+	private void viderStock() {
 		this.stockDemandes.vider();
 	}
 	
